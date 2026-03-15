@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Match Dashboard</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:#0a0f1e;color:#e2e8f0;min-height:100vh}
+  .header{background:linear-gradient(135deg,#1e1b4b,#0a0f1e);padding:24px 32px;border-bottom:1px solid #1e293b}
+  .header h1{font-size:22px;font-weight:700;color:#a78bfa}
+  .header p{color:#64748b;font-size:13px;margin-top:4px}
+  .stats{display:flex;gap:12px;padding:20px 32px;flex-wrap:wrap}
+  .stat-card{background:#111827;border:1px solid #1e293b;border-radius:10px;padding:14px 22px;flex:1;min-width:120px}
+  .stat-card .num{font-size:26px;font-weight:700;color:#a78bfa}
+  .stat-card .lbl{font-size:11px;color:#64748b;margin-top:2px}
+  .controls{display:flex;gap:10px;padding:0 32px 16px;align-items:center;flex-wrap:wrap}
+  .tab-btn{padding:6px 16px;border-radius:20px;border:1px solid #334155;background:transparent;color:#94a3b8;cursor:pointer;font-size:13px;transition:all .15s}
+  .tab-btn:hover{border-color:#a78bfa;color:#a78bfa}
+  .tab-btn.active{background:#a78bfa;border-color:#a78bfa;color:#0a0f1e;font-weight:600}
+  .search-box{margin-left:auto;padding:7px 14px;border-radius:8px;border:1px solid #334155;background:#111827;color:#e2e8f0;font-size:13px;width:220px}
+  .search-box:focus{outline:none;border-color:#a78bfa}
+  .section{padding:0 32px 32px}
+  .section-title{font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:#111827;padding:10px 12px;text-align:left;color:#64748b;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;position:sticky;top:0;cursor:pointer}
+  th:hover{color:#a78bfa}
+  td{padding:9px 12px;border-bottom:1px solid #0f172a;vertical-align:top}
+  tr:hover td{background:#111827}
+  .job-link{color:#818cf8;text-decoration:none;font-weight:500}
+  .job-link:hover{color:#a78bfa;text-decoration:underline}
+  .badge{padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+  .source-tag{background:#1e293b;color:#94a3b8;padding:2px 8px;border-radius:6px;font-size:11px}
+  .reason-cell{max-width:240px;color:#94a3b8;font-size:12px}
+  .missing-cell{max-width:160px;color:#f87171;font-size:11px}
+  .salary-cell{color:#22c55e;font-weight:600;font-size:12px}
+  .empty{text-align:center;padding:60px;color:#334155}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🤖 Job Match Dashboard</h1>
+  <p>Last updated: Sun, Mar 15, 2026 · 221 jobs scanned</p>
+</div>
+<div class="stats">
+  <div class="stat-card"><div class="num">156</div><div class="lbl">Matches Today</div></div>
+  <div class="stat-card"><div class="num" style="color:#22c55e">20</div><div class="lbl">Excellent Fits</div></div>
+  <div class="stat-card"><div class="num" style="color:#3b82f6">96</div><div class="lbl">Strong Fits</div></div>
+  <div class="stat-card"><div class="num">1</div><div class="lbl">Days Tracked</div></div>
+  <div class="stat-card"><div class="num">221</div><div class="lbl">Jobs Scanned</div></div>
+</div>
+<div class="controls">
+  <button class="tab-btn active" onclick="switchTab('All')">All</button><button class="tab-btn" onclick="switchTab('Atlanta')">Atlanta</button><button class="tab-btn" onclick="switchTab('Austin')">Austin</button><button class="tab-btn" onclick="switchTab('Seattle')">Seattle</button><button class="tab-btn" onclick="switchTab('Denver')">Denver</button><button class="tab-btn" onclick="switchTab('Chicago')">Chicago</button><button class="tab-btn" onclick="switchTab('Remote')">Remote</button><button class="tab-btn" onclick="switchTab('Various')">Various</button>
+  <input class="search-box" type="text" placeholder="Search title, company..." oninput="filterTable(this.value)">
+</div>
+<div class="section">
+  <div class="section-title">Today's Matches</div>
+  <div style="overflow-x:auto">
+    <table id="jobs-table">
+      <thead><tr>
+        <th onclick="sortTable(0)">Match %</th>
+        <th onclick="sortTable(1)">Category</th>
+        <th onclick="sortTable(2)">Job Title</th>
+        <th onclick="sortTable(3)">Company</th>
+        <th onclick="sortTable(4)">Location</th>
+        <th onclick="sortTable(5)">Salary</th>
+        <th>Source</th>
+        <th>Why It Fits</th>
+        <th>Missing Skills</th>
+      </tr></thead>
+      <tbody id="jobs-body">
+        <tr data-city="Atlanta">
+          <td><span style="color:#22c55e;font-weight:700">88%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://jobicy.com/jobs/140323-sr-data-analyst-gtm-operations" target="_blank" class="job-link">Sr. Data Analyst GTM Operations</a></td>
+          <td>Smartsheet</td>
+          <td>UK</td>
+          <td><span class="salary-cell">$75,000 - $95,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Excellent fit with strong data analysis experience, SQL skills, ETL pipeline development, and data quality expertise that perfectly matches senior data analyst requirements.</td>
+          <td class="missing-cell">Go-to-market strategy, Advanced statistical modeling, Business intelligence tools</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#22c55e;font-weight:700">88%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5659505646?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Data Analyst</a></td>
+          <td>Bright Vision Technologies</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$66,277.04</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with software development background, API integration experience, and strong technical skills aligning with forward-thinking tech company needs.</td>
+          <td class="missing-cell">Advanced Machine Learning, Cloud Platforms (AWS/Azure), Advanced Visualization Tools</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#22c55e;font-weight:700">88%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5665809589?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>T-Mobile</td>
+          <td>Bellevue, King County</td>
+          <td><span class="salary-cell">$68,000 - $122,700</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with strong data analysis, Python, SQL, and pipeline experience that aligns perfectly with T-Mobile's data analyst requirements.</td>
+          <td class="missing-cell">Advanced statistical modeling, Telecommunications domain knowledge, A/B testing</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#22c55e;font-weight:700">88%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5658613734?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst Intern</a></td>
+          <td>F5 Networks</td>
+          <td>Seattle, King County</td>
+          <td><span class="salary-cell">$49,545 - $106,080</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match for intern-level position with strong Python, SQL, and data pipeline experience that exceeds typical intern requirements.</td>
+          <td class="missing-cell">Cybersecurity Knowledge, Data Visualization Tools, Statistical Modeling</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#22c55e;font-weight:700">88%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5644252364?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>National Association of REALTORS</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$130,000 - $160,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with strong data pipeline, ETL, and operational data experience that directly aligns with building production-ready data infrastructure.</td>
+          <td class="missing-cell">Apache Spark, Cloud data platforms, Machine learning operations</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#22c55e;font-weight:700">88%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5648012776?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Farmer's Fridge Careers</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$83,639.84 - $83,639.84</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Outstanding fit with direct data analysis experience, Python/SQL skills, ETL pipelines, and Google Data Analytics certification perfectly matching requirements.</td>
+          <td class="missing-cell">Tableau advanced features, Statistical modeling, Business domain knowledge</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#22c55e;font-weight:700">88%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5658772926?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Methode Electronics</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$85,000 - $110,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with strong technical skills in databases, API integration, dashboard creation, and data pipeline experience that directly aligns with the IT-focused role requirements.</td>
+          <td class="missing-cell">Database Schema Design, Enterprise IT Systems, Advanced Dashboard Development</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#22c55e;font-weight:700">88%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5643228328?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Jobot</td>
+          <td>Las Vegas, Clark County</td>
+          <td><span class="salary-cell">$60,000 - $75,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent fit with extensive data analysis experience, Python/SQL proficiency, and demonstrated success in data operations and quality assurance.</td>
+          <td class="missing-cell">Advanced visualization tools, Statistical analysis, Business domain knowledge</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://jobicy.com/jobs/139867-freelance-data-science-engineer-python-sql" target="_blank" class="job-link">Freelance Data Science Engineer (Python &amp;#038; SQL)</a></td>
+          <td>Mindrift</td>
+          <td>Poland</td>
+          <td><span class="salary-cell">$45,000 - $65,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Strong match with Python, SQL expertise, data pipeline experience, and relevant projects aligning well with freelance data science engineering requirements.</td>
+          <td class="missing-cell">Machine Learning Libraries, Statistical Modeling, Advanced Analytics</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://jobicy.com/jobs/140209-senior-data-analyst-2" target="_blank" class="job-link">Senior Data Analyst</a></td>
+          <td>TechnologyAdvice</td>
+          <td>Philippines</td>
+          <td><span class="salary-cell">$65,000 - $85,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Excellent match with comprehensive data analysis skills, Python proficiency, data pipeline experience, and proven ability to work with large datasets and ensure data quality.</td>
+          <td class="missing-cell">Advanced machine learning, Big data technologies, Marketing analytics</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5664522547?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Project Portfolio Data Analyst Intern</a></td>
+          <td>Ensono</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$91,870.82 - $91,870.82</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match for intern-level position with strong data pipeline experience, Python/SQL skills, and relevant project work that directly applies to portfolio analysis.</td>
+          <td class="missing-cell">Project portfolio management, PowerBI, Advanced Excel modeling</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5662158112?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Python Developer</a></td>
+          <td>Akaasa Technologies</td>
+          <td>Dessau, Travis County</td>
+          <td><span class="salary-cell">$103,510.09 - $103,510.09</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with strong Python backend experience, API development, and modern frontend skills using React/Next.js perfectly aligned with job requirements.</td>
+          <td class="missing-cell">Django/Flask frameworks, Advanced JavaScript frameworks, DevOps practices</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5655986396?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Engineering Systems and Data Analyst</a></td>
+          <td>Port of Seattle</td>
+          <td>International, King County</td>
+          <td><span class="salary-cell">$97,630.76 - $97,630.76</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent fit with strong data analysis, SQL, pipeline development, and system integration experience that directly matches the role requirements.</td>
+          <td class="missing-cell">System configuration, Engineering domain knowledge, Document management systems</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5641837368?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Consultant - GenAI Full Stack Developer</a></td>
+          <td>Deloitte</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$255,041.02 - $255,041.02</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with strong AI/ML experience, LLM evaluation background, and full-stack development skills directly applicable to GenAI solutions development.</td>
+          <td class="missing-cell">RAG Architecture, Enterprise AI Deployment, Cloud Platforms</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5626990511?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Sr. Data Analyst</a></td>
+          <td>Insight Global</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$92,579.1 - $92,579.1</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with strong data analysis experience, SQL skills, dashboard creation, and data pipeline expertise that directly aligns with the role requirements.</td>
+          <td class="missing-cell">Advanced BI development, Strategic planning experience, Senior-level analytics</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5664441315?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Stand 8</td>
+          <td>Aurora, Arapahoe County</td>
+          <td><span class="salary-cell">$81,331.89 - $81,331.89</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with strong data pipeline experience, Python/SQL skills, and existing Tableau knowledge perfectly aligned with the dashboard development and analytics focus.</td>
+          <td class="missing-cell">Advanced Tableau development, Enterprise reporting experience</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5528350864?se=8Hc3ZiMg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=9E9AD3F0D54AC02B5ABCEB49C0EF4EEC708C9B73" target="_blank" class="job-link">Software Engineer Intern (Chicago)</a></td>
+          <td>Optiver</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$89,344.7 - $89,344.7</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent technical match with strong software engineering fundamentals and recent graduate status perfect for internship level, only missing finance domain knowledge.</td>
+          <td class="missing-cell">Trading systems knowledge, High-frequency computing, Financial markets experience</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5510563191?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Developer</a></td>
+          <td>Radhital01</td>
+          <td>Magnificent Mile, Chicago</td>
+          <td><span class="salary-cell">$20,000 - $30,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with full-stack experience in React, Next.js, FastAPI, and database work covering most requirements.</td>
+          <td class="missing-cell">Visual design skills, Database administration, Scalable architecture</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5662391955?se=Rhu_ZyMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=76A8B814F3140C9711732BD9D9E6ADF10F461011" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>NS2 Mission</td>
+          <td>Chantilly, Fairfax County</td>
+          <td><span class="salary-cell">$142,541.94 - $142,541.94</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with strong ETL pipeline experience, data engineering projects, and relevant technical skills including Python, APIs, and data quality work.</td>
+          <td class="missing-cell">Cloud platforms (AWS/Azure), Advanced ETL tools, Security clearance</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5643252355?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Mindlance</td>
+          <td>Guilderland, Albany County</td>
+          <td><span class="salary-cell">$62,778.03 - $62,778.03</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with data analysis experience, Python, SQL skills, and proven track record in data quality and pipeline work.</td>
+          <td class="missing-cell">Advanced statistical modeling, Business intelligence tools, Domain expertise</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5633174304?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Marketing AI Data Engineer</a></td>
+          <td>Samsara</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$166,089.92 - $166,089.92</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent technical match with AI/ML evaluation experience, data pipelines, and API integration skills that align well with marketing AI infrastructure needs.</td>
+          <td class="missing-cell">Machine learning frameworks, A/B testing platforms, Marketing analytics</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5640456868?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Developer</a></td>
+          <td>Bright Vision Technologies</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$62,640.24 - $62,640.24</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Very strong technical match with full-stack development experience in React, Next.js, Python, and API integrations that directly align with the company's focus on business automation solutions.</td>
+          <td class="missing-cell">DevOps/deployment, Advanced database design, Business automation experience</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5664522554?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Intern - Capacity Management Data Analyst</a></td>
+          <td>Ensono</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$101,220.52 - $101,220.52</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Very good match for intern position with relevant data analysis skills and experience with data quality workflows that translate well to capacity management.</td>
+          <td class="missing-cell">Capacity management concepts, Infrastructure monitoring, Performance optimization</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5643225150?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>ConocoPhillips</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$59,597.16</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical match with Python, SQL, data validation experience, and proven ability to troubleshoot data issues and ensure data integrity.</td>
+          <td class="missing-cell">Advanced Statistical Analysis, Business Intelligence Tools, Domain Expertise in Energy/Oil</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5584104989?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">AI Platform & Data Engineer</a></td>
+          <td>Ad Hoc</td>
+          <td>Bee Cave, Travis County</td>
+          <td><span class="salary-cell">$170,150.62 - $170,150.62</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with AI/ML experience, data engineering skills, and relevant tech stack, though lacks containerization and MLOps expertise.</td>
+          <td class="missing-cell">Kubernetes, Docker, Advanced MLOps</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5624552448?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>Funga PBC</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$90,000 - $120,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong fit with data engineering, Python, and ETL pipeline experience, plus relevant background in data quality and analysis for this environmental tech startup.</td>
+          <td class="missing-cell">Machine learning frameworks, DNA sequencing data experience, Advanced statistical modeling</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5596271670?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Sr Full Stack Developer</a></td>
+          <td>The Hertz Corporation</td>
+          <td>Tarrytown, Travis County</td>
+          <td><span class="salary-cell">$131,639.30 - $131,639.30</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Very strong alignment with Python, React, data pipeline experience, and analytics background, missing only specific cloud and enterprise platform experience.</td>
+          <td class="missing-cell">AWS Cloud Services, Palantir Foundry, Large Scale Systems</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5657164607?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>IBM</td>
+          <td>International, King County</td>
+          <td><span class="salary-cell">$94,663.17 - $94,663.17</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with data pipeline experience, API integrations, and technical skills, though missing enterprise-scale cloud and architecture experience.</td>
+          <td class="missing-cell">Cloud platforms (AWS/Azure), Big data technologies (Spark/Hadoop), Solution architecture experience</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5577016611?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>Cognizant</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$133,626.14 - $133,626.14</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with excellent Python and SQL skills plus proven ETL pipeline experience, missing some advanced infrastructure tools.</td>
+          <td class="missing-cell">Apache Kafka, Docker/Kubernetes, Advanced Analytics Frameworks</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5654529694?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>SHI</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$163,316.08 - $163,316.08</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong programming foundation with Python, Java, TypeScript and full-stack development experience aligns well with software engineer requirements at SHI.</td>
+          <td class="missing-cell">Enterprise software development, System integration, IT solutions experience</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5650362939?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Bright Vision Technologies</td>
+          <td>Federal Heights, Adams County</td>
+          <td><span class="salary-cell">$62,914.38 - $62,914.38</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with Python, data pipelines, and software development experience aligning well with this technology company's focus on automation and optimization solutions.</td>
+          <td class="missing-cell">Business process automation, Operations optimization experience</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5047425508?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>VBEST Software</td>
+          <td>Greenwood Village, Arapahoe County</td>
+          <td><span class="salary-cell">$83,200 - $104,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with SQL, data analysis, and validation experience, though lacks specific Excel/VLOOKUP emphasis mentioned in requirements.</td>
+          <td class="missing-cell">Advanced Excel functions, VLOOKUP expertise, Stored procedures</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5175349693?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>DevSelect</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$104,870.75 - $104,870.75</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match for core data engineering skills with strong ETL pipeline and API integration experience, needing NoSQL and cloud expertise.</td>
+          <td class="missing-cell">NoSQL databases, Web scraping frameworks, Cloud architecture experience</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/4811251671?se=4r4qZyMg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=CFDA7EC9F3201F355B3CE3ED562F7086A0D52462" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>NORC at the University of Chicago</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$73,815.28 - $73,815.28</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical match with Python, SQL, data validation experience, and relevant education, though lacks specific research and statistical analysis background for academic environment.</td>
+          <td class="missing-cell">Advanced Statistics, Research Methodology, Academic Writing</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5646236896?se=Rhu_ZyMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=0C928202303BC473E5056038B387AFB87B99894A" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>The E Group</td>
+          <td>Birmingham, Jefferson County</td>
+          <td><span class="salary-cell">$98,404.09 - $98,404.09</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical alignment with data manipulation and relational database experience, though slightly junior for the 3-5 year requirement and lacks NoSQL/data lake exposure.</td>
+          <td class="missing-cell">NoSQL databases, Data lakes, 3-5 years experience</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5663508335?se=Rhu_ZyMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=CFD5B412B625EE34C8FA412A1F743EBD9B947F42" target="_blank" class="job-link">Senior Data Engineer</a></td>
+          <td>CyberCoders</td>
+          <td>Austin, Lonoke County</td>
+          <td><span class="salary-cell">$136,344.34 - $136,344.34</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with logistics/supply chain domain experience from Shiplify, strong ETL and data quality background, missing some advanced data engineering tools.</td>
+          <td class="missing-cell">Apache Airflow, Kafka, Supply Chain Analytics</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5593993089?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Developer</a></td>
+          <td>Vianai</td>
+          <td>Stanford, Santa Clara County</td>
+          <td><span class="salary-cell">$146,167.64 - $146,167.64</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent fit with AI/ML background, full-stack skills, and data pipeline experience aligning well with ML product development.</td>
+          <td class="missing-cell">ML/AI production experience, Advanced system design, Enterprise scaling</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">82%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5636286839?se=JHs-aSMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=813E8FBAB56DB431C708677F3B3C8C91A9B3938D" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Cygnus Professionals, Inc.</td>
+          <td>Princeton, Mercer County</td>
+          <td><span class="salary-cell">$75,414.21</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical alignment with data analysis, ETL pipelines, and data quality validation experience, though lacks specific BI dashboard development and data infrastructure scaling experience.</td>
+          <td class="missing-cell">Business Intelligence (BI) dashboards, Advanced data modeling, Data infrastructure management</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">80%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5654277026?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>Snapsheet</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$83,772.67 - $83,772.67</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent technical fit with data pipeline experience, API integrations, and full-stack development skills directly applicable to virtual appraisal systems.</td>
+          <td class="missing-cell">Cloud infrastructure, Insurance domain knowledge, Vehicle appraisal systems</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">80%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5637392604?se=JHs-aSMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=5056CF053A2AACD1506A014259555C23B049CF10" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Tri-Com Consulting</td>
+          <td>Connecticut, US</td>
+          <td><span class="salary-cell">$90,085.89 - $90,085.89</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical match with data analysis skills and experience, though lacks specific healthcare domain knowledge for community health needs assessment.</td>
+          <td class="missing-cell">Healthcare data experience, Community health expertise, Technical writing collaboration</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">79%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/4811343158?se=lp13XyMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=BA5EC1F8E7074A9015431A40012990E57478E809" target="_blank" class="job-link">Marketing Data Analyst</a></td>
+          <td>Spartan Technologies</td>
+          <td>North Atlanta, DeKalb County</td>
+          <td><span class="salary-cell">$83,067.34</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical skills with data validation, reporting, and analysis experience that translates well to marketing analytics needs.</td>
+          <td class="missing-cell">Marketing Analytics Platforms, Campaign Attribution Modeling, A/B Testing Frameworks</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://jobicy.com/jobs/140401-sr-ai-data-engineer-uk-remote" target="_blank" class="job-link">Sr. AI Data Engineer (UK Remote)</a></td>
+          <td>Turnitin, LLC</td>
+          <td>UK</td>
+          <td><span class="salary-cell">$90,000 - $120,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Excellent match with AI/ML evaluation experience and data pipeline skills, though missing deep learning frameworks for senior AI data engineering.</td>
+          <td class="missing-cell">PyTorch/TensorFlow, MLOps, Scala</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://jobicy.com/jobs/139853-senior-software-engineer-ii-data-solutions-measurement" target="_blank" class="job-link">Senior Software Engineer II &amp;#8211; Data Solutions &amp;#038; Measurement</a></td>
+          <td>Cint</td>
+          <td>Czechia</td>
+          <td><span class="salary-cell">$80,000 - $110,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Good technical fit with Python, API integration, and data pipeline skills, but lacks the senior-level experience typically required for this role.</td>
+          <td class="missing-cell">Senior-level Experience, Large-scale System Architecture, Team Leadership</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5601948003?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer - Remote</a></td>
+          <td>Versa Networks</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$166,337.2 - $166,337.2</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with data pipeline experience, Python skills, and API integration background, though missing some advanced data engineering tools.</td>
+          <td class="missing-cell">Apache Spark, Kubernetes, Cloud platforms (AWS/Azure)</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://jobicy.com/jobs/140270-junior-software-engineer-claimsource" target="_blank" class="job-link">Junior Software Engineer &amp;#8211; ClaimSource</a></td>
+          <td>Experian</td>
+          <td>Costa Rica</td>
+          <td><span class="salary-cell">$50,000 - $70,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Strong technical fit with Python, SQL, data pipeline experience, and appropriate junior level, though lacks domain-specific healthcare and claims processing knowledge.</td>
+          <td class="missing-cell">Healthcare domain knowledge, Enterprise systems, Claims processing</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://jobicy.com/jobs/140388-full-stack-developer-2" target="_blank" class="job-link">Full Stack Developer</a></td>
+          <td>Nacre Capital</td>
+          <td>Poland</td>
+          <td><span class="salary-cell">$60,000 - $80,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Strong technical match with full-stack development skills in Python, React, Next.js, and API integration experience, though lacks agriculture industry background.</td>
+          <td class="missing-cell">Agriculture domain, Remote work setup, European market knowledge</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5597183617?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Software Developer</a></td>
+          <td>Sarnova</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$103,253.84 - $103,253.84</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with strong full-stack development skills using React, Next.js, FastAPI, and API integration experience that aligns well with the role requirements.</td>
+          <td class="missing-cell">Healthcare/medical technology experience, Advanced React frameworks, Cloud deployment</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5641653300?se=lp13XyMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=C834B66A6E561C9FBA976558BC2FDCEA00E91A78" target="_blank" class="job-link">Sr. Data Analyst</a></td>
+          <td>Home Depot</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$94,125.56 - $94,125.56</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical match with Python, SQL, and data analysis experience, though lacks specific supply chain expertise and senior-level analytical depth.</td>
+          <td class="missing-cell">Advanced statistical analysis, Supply chain domain knowledge, Business intelligence tools</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5602180630?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>Outdoorsy</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$161,834.19 - $161,834.19</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with data pipeline experience, API integrations, and Python skills directly relevant to building travel marketplace data systems.</td>
+          <td class="missing-cell">Apache Spark/Kafka, Cloud data warehousing, Scala or Java for big data</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5664442036?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Developer</a></td>
+          <td>Stride, Inc.</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$105,025.59 - $105,025.59</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with full-stack development skills using React, TypeScript, and API integration, though missing specific WordPress and CMS experience.</td>
+          <td class="missing-cell">WordPress, CMS Development, Educational Technology</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5342651834?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Ferrovialcompany</td>
+          <td>West Lake Hills, Travis County</td>
+          <td><span class="salary-cell">$124,550.64 - $124,550.64</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical match with Python, SQL, and data quality experience, but lacks specific master data management and user administration experience.</td>
+          <td class="missing-cell">Master data management, User role administration, Advanced database administration</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5634796095?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Business Data Analyst</a></td>
+          <td>Arrive Logistics</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$84,074.97 - $84,074.97</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with data operations experience at logistics company and relevant technical skills, though may need deeper business analysis focus.</td>
+          <td class="missing-cell">Transportation/logistics domain expertise, Business intelligence tools, Advanced Excel modeling</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5587819825?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>DocuSign</td>
+          <td>Times Square, King County</td>
+          <td><span class="salary-cell">$140,431.11 - $140,431.11</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical foundation with programming skills and API experience that translates well to software engineering, though missing some specific enterprise development experience.</td>
+          <td class="missing-cell">C#/.NET, Document processing systems, Enterprise software development</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5640857912?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Developer</a></td>
+          <td>Pinkerton</td>
+          <td>International, King County</td>
+          <td><span class="salary-cell">$191,758.84 - $191,758.84</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent full-stack match with Python, FastAPI, React, TypeScript, and API integration experience directly aligning with full-stack developer requirements.</td>
+          <td class="missing-cell">Backend frameworks beyond FastAPI, Database design at scale, Enterprise security</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5578987134?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Developer - UI focused</a></td>
+          <td>Capgemini</td>
+          <td>Bellevue, King County</td>
+          <td><span class="salary-cell">$124,925.48 - $124,925.48</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match for frontend skills with React, TypeScript, and API integration experience, but missing the required .NET backend technologies.</td>
+          <td class="missing-cell">.NET Core, ASP.NET Core, SQL Server</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5663095829?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>T-Mobile USA, Inc.</td>
+          <td>Bellevue, King County</td>
+          <td><span class="salary-cell">$88,903.4 - $88,903.4</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation in Python, SQL, and data analysis with relevant experience in data quality and validation, though may need more business-focused analytics experience.</td>
+          <td class="missing-cell">Advanced Analytics, Statistical Modeling, Business Intelligence Tools</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5625376982?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>Janus Henderson Investors</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$144,478.1 - $144,478.1</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical skills in data engineering fundamentals with relevant pipeline experience, but lacks financial industry background and advanced enterprise tools.</td>
+          <td class="missing-cell">Financial Services Domain, Cloud Data Platforms, Advanced SQL Optimization</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5664464901?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer 1</a></td>
+          <td>Indeed</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$216,730.17 - $216,730.17</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match for entry-level data engineer role with strong Python, SQL, ETL, and API integration experience, though missing some advanced distributed systems knowledge.</td>
+          <td class="missing-cell">Large-scale distributed systems, Kafka/streaming, Advanced cloud technologies</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5664552594?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst-Technical-Staff</a></td>
+          <td>Intermountain Health</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$100,098.15 - $100,098.15</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical match with Python, SQL, data pipelines, and analytics experience, though lacks healthcare industry background for this medical organization role.</td>
+          <td class="missing-cell">Healthcare domain knowledge, Clinical data experience, Advanced statistics</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5644870579?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>Diverge Health</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$145,000 - $155,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with relevant data pipeline, API integration, and SQL experience, though lacking healthcare domain knowledge and cloud platform expertise.</td>
+          <td class="missing-cell">Cloud platforms (AWS/Azure), Healthcare data experience, Advanced ETL frameworks</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5646155541?se=8Hc3ZiMg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=D5DF84862673E366574CA6275E8951F5F8421E9F" target="_blank" class="job-link">Entry level software engineer/Junior AI engineer</a></td>
+          <td>SynergisticIT</td>
+          <td>Jackson Park, Cook County</td>
+          <td><span class="salary-cell">$106,066.87 - $106,066.87</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with AI/ML experience from OutlierAI role, LLM evaluation skills, and strong programming foundation in Python and API development.</td>
+          <td class="missing-cell">Machine learning frameworks, Deep learning experience, Advanced AI model training</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5239914653?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>RBGlobal</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$109,141.34 - $109,141.34</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical foundation and early career level match, but lacks specific DevOps and CI/CD experience mentioned.</td>
+          <td class="missing-cell">CI/CD pipelines, DevOps tools, Senior-level experience</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5638418513?se=4r4qZyMg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=13B5A3FF79D40C17A65CB53963D60C557CA4A782" target="_blank" class="job-link">Jr java fullstack developer/Data analyst</a></td>
+          <td>SynergisticIT</td>
+          <td>Jackson Park, Cook County</td>
+          <td><span class="salary-cell">$100,061.21 - $100,061.21</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with Java, Python, and data analysis skills aligned with junior level requirements, though missing some specific certifications.</td>
+          <td class="missing-cell">AWS certification, Spring Framework, Advanced Java</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5639875297?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>McMaster-Carr</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$143,500 - $164,500</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical fit with data analysis, SQL, and Python skills, plus relevant experience with data quality and validation, though lacks specific merchandising industry experience.</td>
+          <td class="missing-cell">Merchandising domain knowledge, Business strategy analysis, Advanced reporting tools</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5644891442?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>Levi, Ray & Shoup</td>
+          <td>Fitchburg, Dane County</td>
+          <td><span class="salary-cell">$185,023.25 - $185,023.25</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical match with ETL pipelines, Python, SQL, and data quality experience, though lacks specific data warehouse development expertise.</td>
+          <td class="missing-cell">Data Warehouse Development, Spark/Hadoop, Cloud Platforms (AWS/Azure)</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5665239770?se=ftvAaCMg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=6CD7CE51961E66EFE45177C9D90EED147F5FCCD5" target="_blank" class="job-link">Full Stack Developer</a></td>
+          <td>Manpower</td>
+          <td>Palm Bay, Brevard County</td>
+          <td><span class="salary-cell">$78,574.61</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent match with AI/ML experience from OutlierAI, full-stack development skills, and OpenAI API experience, though needs more hands-on LLM integration and AI deployment experience.</td>
+          <td class="missing-cell">LLM integration, Workflow automation, AI deployment</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5664455510?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Lead Data Engineer- Ataccama</a></td>
+          <td>Cognizant</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$102,176.72 - $102,176.72</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong data engineering background with relevant experience in data quality, validation workflows, and data pipelines, but lacks specific Ataccama/Collibra platform experience required for the lead role.</td>
+          <td class="missing-cell">Ataccama platform, Collibra, Master Data Management (MDM)</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5648115253?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst - Solutions Strategy, Analytics</a></td>
+          <td>Home Depot</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$109,194.12 - $109,194.12</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation and data analysis experience align well with the role requirements, though lacks specific supply chain industry experience.</td>
+          <td class="missing-cell">Supply chain domain knowledge, Advanced analytics techniques, Data storytelling experience</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5643946118?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst (onsite)</a></td>
+          <td>MP RPO</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$60,000 - $65,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong data analysis foundation with SQL and reporting skills, though lacks specific photography industry experience.</td>
+          <td class="missing-cell">Photography Industry Knowledge, Member Services Experience, CRM Systems</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5591733685?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Developer In Person In Austin</a></td>
+          <td>Satsuma</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$85,012.98 - $85,012.98</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation with Python, API development, and React/Next.js experience aligns well with full-stack requirements, though lacks specific Spring Boot and microservices experience.</td>
+          <td class="missing-cell">Spring Boot, Microservices architecture, AI agent orchestration</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5646344232?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>APEX Fintech Services</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$100,581.77 - $100,581.77</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Solid data analysis and pipeline experience with relevant technical skills, but lacks financial services and securities industry background.</td>
+          <td class="missing-cell">Financial markets knowledge, Securities industry experience, Fintech domain expertise</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5646276875?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Data Analyst</a></td>
+          <td>Coalition</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$87,036.48 - $87,036.48</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent data pipeline and API integration experience matches technical requirements, though missing senior-level experience and GTM-specific analytics background.</td>
+          <td class="missing-cell">Customer lifecycle analytics, Marketing attribution modeling, Senior-level leadership</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5410604985?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">BI Full Stack Developer - Tableau</a></td>
+          <td>Tiger Analytics Inc.</td>
+          <td>Seattle, King County</td>
+          <td><span class="salary-cell">$106,813.77 - $106,813.77</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent fit with Tableau experience, data pipeline expertise, Python skills, and analytics background matching Tiger Analytics' consulting focus.</td>
+          <td class="missing-cell">Advanced Tableau development, Enterprise BI architecture, Machine learning implementation</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/4833048951?se=Xu04YyMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=81547DF778E16500333600DCCF2660DECB5EB9BD" target="_blank" class="job-link">Business Data Analyst</a></td>
+          <td>Strong-Bridge Envision Consulting</td>
+          <td>Bellevue, King County</td>
+          <td><span class="salary-cell">$97,461.63 - $97,461.63</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Technical data skills are solid with good project experience, but may need more business consulting and stakeholder-facing experience for this consulting role.</td>
+          <td class="missing-cell">Business Process Analysis, Stakeholder Management, Advanced BI Reporting</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5643063912?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Sr Data Analyst</a></td>
+          <td>Univar Solutions</td>
+          <td>Bellevue, King County</td>
+          <td><span class="salary-cell">$111,514.09 - $111,514.09</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation in data analysis, Python, and SQL with relevant experience, but lacks senior-level business optimization and system redesign experience.</td>
+          <td class="missing-cell">Advanced Analytics, Business Process Improvement, Enterprise Systems</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5664522781?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>Pearson</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$131,913.38 - $131,913.38</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation with Python, API development, and full-stack project experience aligns well with junior full-stack role requirements.</td>
+          <td class="missing-cell">Full-stack web development experience, Large-scale platform experience, Digital credentials domain knowledge</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5528364782?se=Uh5KZCMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=34AE5B06E479F6EF9ACA108EEE07C5A08B9EC45D" target="_blank" class="job-link">Software Engineer Internships</a></td>
+          <td>Danaher</td>
+          <td>Aurora, Arapahoe County</td>
+          <td><span class="salary-cell">$95,423.64 - $95,423.64</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation with Python, Java, and full-stack experience aligns well with software engineering internship requirements, though lacks some traditional systems programming skills.</td>
+          <td class="missing-cell">C/C++, Embedded Systems, Algorithm Optimization</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5606881278?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer / Sr Data Engineer</a></td>
+          <td>The Hartford</td>
+          <td>Illinois Medical District, Chicago</td>
+          <td><span class="salary-cell">$90,643.03 - $90,643.03</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong data engineering fundamentals with Python and ETL experience align well with the AI platforms focus.</td>
+          <td class="missing-cell">Cloud platforms, Machine learning pipelines, Insurance domain knowledge</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5641299586?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>RAPP</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$81,000 - $97,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical alignment with data engineering fundamentals and API experience, but missing marketing domain expertise and advanced analytics tools.</td>
+          <td class="missing-cell">Marketing analytics experience, Advanced data visualization, Big data technologies</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5645546583?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>Braven</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$168,723 - $168,723</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical skills in full-stack development and systems engineering match well, though lacks specific nonprofit or education technology experience.</td>
+          <td class="missing-cell">Nonprofit sector experience, Educational technology, Career services systems</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5330784972?se=4r4qZyMg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=DF649C4A27216FABF016C29A96F5A100A2E93402" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Harris & Harris</td>
+          <td>The Loop, Chicago</td>
+          <td><span class="salary-cell">$37,440 - $37,440</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical foundation with data analysis and pattern identification skills, but lacks industry-specific experience in utilities, government, or healthcare sectors.</td>
+          <td class="missing-cell">Revenue Recovery Systems, Utilities Domain Knowledge, Customer Care Experience</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5654997865?se=Rhu_ZyMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=8B91C84C8D6C6AB38FFAB6E25F70BA0DD62F5785" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>Omnitech, Inc.</td>
+          <td>Sioux Falls, Minnehaha County</td>
+          <td><span class="salary-cell">$68,726.22 - $68,726.22</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical match with data engineering skills and Python experience, but may not align with the consulting personality requirement and on-site location constraint.</td>
+          <td class="missing-cell">Consulting personality, Local market knowledge, On-site availability</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5655937165?se=tNdIaCMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=7181176FF6200B5EF8BED0F29EFE3C61D6523D4E" target="_blank" class="job-link">Senior Software Engineer</a></td>
+          <td>Skycubed</td>
+          <td>San Diego, San Diego County</td>
+          <td><span class="salary-cell">$173,063.31 - $173,063.31</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent technical match with Python, TypeScript, and full-stack experience, but lacks required security clearance and some specialized cyber domain skills.</td>
+          <td class="missing-cell">Security Clearance, Golang, DevSecOps</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">75%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5644890819?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Developer</a></td>
+          <td>Levi, Ray & Shoup</td>
+          <td>Dimondale, Eaton County</td>
+          <td><span class="salary-cell">$115,725.2 - $115,725.2</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation with Python, API development, and full-stack projects, but lacks specific backend framework depth.</td>
+          <td class="missing-cell">Backend frameworks experience, Database design, DevOps/deployment</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://jobicy.com/jobs/140523-senior-data-engineer-mobility-as-a-service-company" target="_blank" class="job-link">Senior Data Engineer &amp;#8211; Mobility-as-a-service Company</a></td>
+          <td>Truelogic</td>
+          <td>Brazil</td>
+          <td><span class="salary-cell">$70,000 - $95,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Strong alignment with data pipeline experience and Python/SQL skills, but lacks big data distributed systems experience typical for senior mobility data engineering roles.</td>
+          <td class="missing-cell">Apache Spark, Kafka, Docker/Kubernetes</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5637957227?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Data Engineer</a></td>
+          <td>Intercontinental Exchange Holdings</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$122,938.03 - $122,938.03</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good fit with ETL pipeline experience and data quality focus, but lacks senior-level expertise in enterprise data platforms.</td>
+          <td class="missing-cell">Apache Kafka, Snowflake, Airflow</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5630379153?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer, Product Analytics</a></td>
+          <td>Meta</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$155,669.16</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical alignment with Python, SQL, data pipelines, and API experience, plus relevant AI/ML background, though lacks experience with Meta's scale and product analytics focus.</td>
+          <td class="missing-cell">Large-scale Distributed Systems, Product Analytics Experience, Meta Tech Stack</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://jobicy.com/jobs/140501-ai-software-engineer" target="_blank" class="job-link">AI Software Engineer</a></td>
+          <td>Zone &amp;#038; Co</td>
+          <td>Spain</td>
+          <td><span class="salary-cell">$75,000 - $100,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Excellent match with AI experience, Python skills, and OpenAI API knowledge, though could benefit from deeper ML framework experience and SaaS development background.</td>
+          <td class="missing-cell">Machine Learning frameworks, Advanced AI/ML, SaaS architecture</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5584105010?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer / Senior Software Engineer</a></td>
+          <td>Applied Systems Inc</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$135,898.69 - $135,898.69</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation with Python, APIs, and full-stack development aligns well with software engineering role requirements.</td>
+          <td class="missing-cell">Insurance Domain Knowledge, Enterprise Architecture, Team Leadership</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5636142976?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Developer - Remote</a></td>
+          <td>Cherokee Nation Businesses</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$123,420.14 - $123,420.14</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical alignment with full-stack skills, data processing experience, and relevant technologies, but lacks required Public Trust clearance and government domain experience.</td>
+          <td class="missing-cell">Security clearance, Government sector experience, Enterprise-scale development</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://jobicy.com/jobs/140400-working-student-data-bi-analyst-m-f-d" target="_blank" class="job-link">Working Student Data / BI Analyst (m/f/d)</a></td>
+          <td>1KOMMA5°</td>
+          <td>Germany</td>
+          <td><span class="salary-cell">$45,000 - $65,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Strong technical foundation in data analysis and Python/SQL skills align well, but lacks BI-specific tools experience and role is in Germany requiring relocation.</td>
+          <td class="missing-cell">Business Intelligence tools, German language, Hardware industry knowledge</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5593993072?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer II</a></td>
+          <td>Vectra</td>
+          <td>Bee Cave, Travis County</td>
+          <td><span class="salary-cell">$87,962.22 - $87,962.22</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation with Python, API development, and full-stack experience aligns well with software engineering role, though lacks some enterprise-level experience.</td>
+          <td class="missing-cell">System Design, Security Knowledge, Advanced Algorithms</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5518518675?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Onset Technologies</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$69,761.84 - $69,761.84</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical foundation with data analysis and visualization skills, but missing business analysis and stakeholder facilitation experience.</td>
+          <td class="missing-cell">Business analysis, Workshop facilitation, Epic/User Story creation</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5663089713?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Data Analyst</a></td>
+          <td>Realtor.com Careers</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$91,296.3 - $91,296.3</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation in data analysis and Python/SQL aligns well, but lacks senior-level experience and real estate industry background.</td>
+          <td class="missing-cell">Advanced statistical analysis, Real estate domain knowledge, Senior-level experience</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5537108276?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer - Data Engineering</a></td>
+          <td>Plaid</td>
+          <td>San Francisco, California</td>
+          <td><span class="salary-cell">$176,852.9 - $176,852.9</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with data pipeline experience, Python/SQL skills, and API integration background, though lacking experience with large-scale distributed systems.</td>
+          <td class="missing-cell">Distributed systems, High-scale data processing, Financial data experience</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5666010064?se=5sNEYiMg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=6E6C0C2F7821BDCCC8E6D07219DFDFE993813B32" target="_blank" class="job-link">Senior Software Engineer, Big Data</a></td>
+          <td>ZipRecruiter</td>
+          <td>Seattle, King County</td>
+          <td><span class="salary-cell">$149,682 - $149,682</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation in Python, SQL, and data pipelines aligns well with big data requirements, but lacks senior-level experience and specific big data frameworks.</td>
+          <td class="missing-cell">Big Data frameworks (Hadoop, Spark), Senior-level experience, Distributed systems</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5664762470?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Manager - GenAI Full Stack Developer</a></td>
+          <td>Deloitte</td>
+          <td>International, King County</td>
+          <td><span class="salary-cell">$225,767.06 - $225,767.06</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical fit with AI/ML experience and full-stack development skills, but lacks the management experience and specific GenAI expertise required for this senior role.</td>
+          <td class="missing-cell">Team leadership experience, RAG systems, Enterprise consulting</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5547596914?se=Xu04YyMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=B666C921A402EFE3E1CCCBB1214DF6B81DEC3516" target="_blank" class="job-link">Test Data Analyst</a></td>
+          <td>Overland AI</td>
+          <td>Seattle, King County</td>
+          <td><span class="salary-cell">$95,000 - $120,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong data analysis and quality validation skills align well with test data analysis needs, though lacks specific testing automation and defense industry experience.</td>
+          <td class="missing-cell">Test Automation, Robotics/ML Testing, Defense Domain Knowledge</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5664464755?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Consultant, Data Engineer</a></td>
+          <td>IBM</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$146,296.5 - $146,296.5</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation in data engineering with Python, SQL, and ETL pipelines, but lacks cloud platform experience and enterprise consulting background typical for IBM roles.</td>
+          <td class="missing-cell">Cloud platforms (AWS/Azure), Spark/Hadoop, Enterprise consulting experience</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5633622614?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Sand Cherry Associates</td>
+          <td>Denver, Colorado</td>
+          <td><span class="salary-cell">$68,190.22 - $68,190.22</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation with data analysis and API integration skills, though lacks specific video products and customer-centric analytics experience.</td>
+          <td class="missing-cell">Video products domain knowledge, Customer analytics experience, Digital marketing metrics</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5654495048?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>Reply</td>
+          <td>The Gap, Chicago</td>
+          <td><span class="salary-cell">$135,452.42 - $135,452.42</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong data engineering skills with API integration and pipeline experience, though lacks IoT-specific expertise.</td>
+          <td class="missing-cell">IoT protocols, Cloud computing platforms, Manufacturing domain knowledge</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5664247158?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>TEKsystems</td>
+          <td>Illinois Medical District, Chicago</td>
+          <td><span class="salary-cell">$103,219.58 - $103,219.58</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Solid foundation in data pipelines and API integration aligns well, but lacks cloud platform experience and enterprise-scale architecture knowledge.</td>
+          <td class="missing-cell">Cloud infrastructure (AWS/Azure), Scalable architecture design, Enterprise data frameworks</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5528333614?se=8Hc3ZiMg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=EF692B6998F3D49F68AFC18A614A613317A4B632" target="_blank" class="job-link">Software Engineering Intern - Remote Job</a></td>
+          <td>EnthuZiastic</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$91,225.45 - $91,225.45</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation with Python, API integration, and full-stack development experience aligns well with software engineering intern requirements.</td>
+          <td class="missing-cell">Team collaboration experience, Product development lifecycle, Application maintenance</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5650258726?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>Morningstar</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$89,625 - $152,350</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong Python skills and API experience align well, but lacks .NET and AWS expertise required for the role.</td>
+          <td class="missing-cell">.NET, AWS, AI/ML integration</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5662192768?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>SANINC</td>
+          <td>The Gap, Chicago</td>
+          <td><span class="salary-cell">$122,698.15 - $122,698.15</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong analytical and KPI development skills match well, though position appears more sales-focused than traditional data analysis and lacks manufacturing domain experience.</td>
+          <td class="missing-cell">Sales Management, Manufacturing Industry Knowledge, Account Management</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5647391864?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Inspire11</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$163,081.84 - $163,081.84</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good match with data analysis skills and technical background, but limited consulting experience for a modern business consulting firm environment.</td>
+          <td class="missing-cell">Consulting experience, Advanced analytics, Client-facing skills</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5621444666?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer</a></td>
+          <td>Interactive Brokers Group, Inc.</td>
+          <td>Glenville, Fairfield County</td>
+          <td><span class="salary-cell">$163,351.9 - $163,351.9</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical foundation with data pipelines and API integration experience, but lacks financial services background and advanced distributed systems knowledge.</td>
+          <td class="missing-cell">Financial Services Domain, Scala, Distributed Computing</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">72%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5659166626?se=tNdIaCMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=C4024DE5558B22E7FB18EF3EE08CC00789F7E922" target="_blank" class="job-link">Sr. Software Engineer</a></td>
+          <td>Transcepta</td>
+          <td>Aliso Viejo, Orange County</td>
+          <td><span class="salary-cell">$153,826.64</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong programming foundation with Python, API integration experience, and full-stack project work, though lacks specific REST services development and enterprise SaaS experience.</td>
+          <td class="missing-cell">REST API development, SaaS architecture, High throughput systems</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">70%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://jobicy.com/jobs/140151-senior-software-engineer-risk-engineering-2" target="_blank" class="job-link">Senior Software Engineer, Risk Engineering</a></td>
+          <td>Flex</td>
+          <td>USA</td>
+          <td><span class="salary-cell">$150,000 - $190,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Data pipeline experience and quality validation skills are relevant for risk engineering, though missing financial services expertise and senior-level experience.</td>
+          <td class="missing-cell">FinTech domain knowledge, Risk modeling, Senior-level architecture</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#3b82f6;font-weight:700">70%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5640415914?se=ajP1XiMg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=F4BDA759BA1D9D2B2519FF2AFF179807B0A5D391" target="_blank" class="job-link">Full Stack Developer with Security Clearance</a></td>
+          <td>Contact Government Services, LLC</td>
+          <td>Lenox Square Finance, Fulton County</td>
+          <td><span class="salary-cell">$172,955.75 - $172,955.75</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical fit with full-stack development skills and data pipeline experience directly relevant to enterprise data inventory work, but requires security clearance and government sector experience.</td>
+          <td class="missing-cell">Security clearance, Enterprise data architecture, Government compliance experience</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#f59e0b;font-weight:700">70%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5447139131?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Data Analyst</a></td>
+          <td>realtor</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$114,884.64 - $114,884.64</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical foundation matches requirements but lacks senior-level experience and real estate industry knowledge for this higher-level position.</td>
+          <td class="missing-cell">Advanced statistical analysis, Real estate domain knowledge, Senior-level experience</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#3b82f6;font-weight:700">70%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5646359887?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst II</a></td>
+          <td>Echodyne Corp</td>
+          <td>Kirkland, King County</td>
+          <td><span class="salary-cell">$104,030 - $155,839</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong data analysis foundation and technical skills match the role requirements, though lacks domain-specific radar technology and hardware analytics experience.</td>
+          <td class="missing-cell">Radar/Signal Processing, Hardware Data Analysis, Advanced Statistics</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">70%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5655801118?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>Cardinal Health</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$116,627.28 - $116,627.28</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good programming skills and API experience match the application development role, though lacks specific enterprise and healthcare experience.</td>
+          <td class="missing-cell">Enterprise application development, Healthcare domain experience, Legacy system maintenance</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">70%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/4811272944?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full stack developer</a></td>
+          <td>rv</td>
+          <td>Denver, Colorado</td>
+          <td><span class="salary-cell">$82,712.48 - $82,712.48</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical skills and agile experience match well, but may lack the 3-8 years experience requirement and enterprise-level development background.</td>
+          <td class="missing-cell">3+ Years Experience, Enterprise Software, Scrum Master</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#3b82f6;font-weight:700">70%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/details/5635245685?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack developer - React /Node</a></td>
+          <td>Nava Software Solutions LLC</td>
+          <td>Federal Heights, Adams County</td>
+          <td><span class="salary-cell">$113,727.07 - $113,727.07</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong alignment with React frontend skills and API development experience, but missing specific Node.js backend experience and advanced full-stack development depth.</td>
+          <td class="missing-cell">Node.js backend development, Advanced React patterns, Production scalability experience</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#f59e0b;font-weight:700">70%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5646134728?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Developer</a></td>
+          <td>Charles Schwab</td>
+          <td>South Lake, Tarrant County</td>
+          <td><span class="salary-cell">$123,264.75 - $123,264.75</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical match with full-stack and data experience, though lacks financial services background.</td>
+          <td class="missing-cell">Financial services domain, Enterprise architecture, Advanced backend systems</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://jobicy.com/jobs/140479-staff-engineer-data-insights-engineer" target="_blank" class="job-link">Staff Engineer &amp;#8211; Data &amp;#038; Insights Engineer</a></td>
+          <td>RWS Group</td>
+          <td>Romania</td>
+          <td><span class="salary-cell">$95,000 - $130,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Good fit with data pipeline and analysis experience, but missing advanced orchestration tools and enterprise data governance experience for staff-level role.</td>
+          <td class="missing-cell">Elasticsearch, Apache Airflow, Data governance frameworks</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5664524386?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Telematics Data Engineer</a></td>
+          <td>Ford Motor Company</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$132,664.53</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with data pipeline experience, API integrations, and geospatial data work that aligns well with telematics requirements, though missing automotive industry experience.</td>
+          <td class="missing-cell">Automotive Domain Knowledge, Large-scale Streaming, Vehicle Telematics</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://jobicy.com/jobs/140148-senior-software-engineer-9" target="_blank" class="job-link">Senior Software Engineer</a></td>
+          <td>Pair Team</td>
+          <td>USA</td>
+          <td><span class="salary-cell">$140,000 - $175,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Data operations and API integration experience could support healthcare systems, but lacks domain expertise and senior engineering experience.</td>
+          <td class="missing-cell">Healthcare domain knowledge, Senior-level experience, System scalability</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5654417288?se=8Mp4XiMg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=39CD3A4FE0F500B5C4BCE354D9191AF069D9C9B5" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>Cargill</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$86,168.29 - $86,168.29</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Technical skills match software engineering needs but lacks domain experience in Cargill's agricultural and food industry focus.</td>
+          <td class="missing-cell">Agricultural/Food Industry Knowledge, Enterprise Systems, Legacy System Integration</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5268389403?se=8Mp4XiMg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=2A3B6B8709E477D52D8ED238CBF163C5E0507018" target="_blank" class="job-link">Software Engineer​</a></td>
+          <td>Cargill</td>
+          <td>Atlanta, Fulton County</td>
+          <td><span class="salary-cell">$88,485.55 - $88,485.55</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Technical skills match software engineering needs but lacks domain experience in Cargill's agricultural and food industry focus.</td>
+          <td class="missing-cell">Agricultural/Food Industry Knowledge, Enterprise Systems, Legacy System Integration</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5633174250?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Lead Full Stack Developer, Business Applications</a></td>
+          <td>Samsara</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$154,562.94 - $154,562.94</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical match with full-stack skills and data experience relevant to IoT applications, but lacks the leadership experience and enterprise-scale architecture skills for this lead position.</td>
+          <td class="missing-cell">Lead/management experience, IoT systems knowledge, Enterprise application architecture</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5633172904?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Data Analyst</a></td>
+          <td>Samsara</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$142,805.36 - $142,805.36</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical skills match but lacks the senior-level experience and IoT industry background typically required for this role.</td>
+          <td class="missing-cell">Senior-level experience, IoT domain expertise, Advanced statistical modeling</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5345803922?se=bBpaYSMg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=FADFBD6B09075B0BA8C43F9DDD1BE1A5E7EDB6C4" target="_blank" class="job-link">Senior Data Analyst</a></td>
+          <td>SafeLease</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$110,977.8 - $110,977.8</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Technical skills align well but lacks the senior-level experience and insurance/real estate domain knowledge expected for this role.</td>
+          <td class="missing-cell">Insurance industry knowledge, Senior-level experience, Real estate/leasing domain expertise</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5414541965?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>Amazon</td>
+          <td>International, King County</td>
+          <td><span class="salary-cell">$198,474.47 - $198,474.47</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good software engineering fundamentals and API experience, but lacks specific streaming platform experience and large-scale distributed systems knowledge required for Twitch.</td>
+          <td class="missing-cell">Live streaming systems, Scale experience, AWS services</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5639062569?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Sr. Consultant, Data Engineering</a></td>
+          <td>IBM</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$137,950.22 - $137,950.22</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical skills alignment but lacks the senior-level consulting experience and hybrid cloud expertise expected for this IBM senior consultant position.</td>
+          <td class="missing-cell">Senior consulting experience, Hybrid cloud expertise, AI/ML implementation</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5665229410?se=klfAZSMg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=D512974262DA9A40E83AD7CAC4C29F18984D3116" target="_blank" class="job-link">Data Engineer (Databricks (PySpark) and Python</a></td>
+          <td>Eikon Consulting Group</td>
+          <td>Dearborn Park, Chicago</td>
+          <td><span class="salary-cell">$122,973.09 - $122,973.09</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good Python and data pipeline foundation but missing key Databricks and PySpark technologies specifically required.</td>
+          <td class="missing-cell">PySpark, Databricks, Big data processing</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5653217519?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>Trident Consulting</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$94,265.52 - $94,265.52</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Has Java experience and full-stack capabilities but lacks specific Spring, microservices, and Oracle experience required for payment systems development.</td>
+          <td class="missing-cell">Spring Framework, Microservices architecture, Oracle database</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5652449636?se=ftvAaCMg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=2A3A6CBFFE89558D1E9A509DE45121DA9E0A40B0" target="_blank" class="job-link">Full Stack Developer</a></td>
+          <td>Ironclad Defense Works</td>
+          <td>Norfolk, Norfolk City</td>
+          <td><span class="salary-cell">$86,781.70</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Full-stack development experience with React, Next.js, and API integration aligns well, but lacks required security clearance and containerized application deployment experience.</td>
+          <td class="missing-cell">Security clearance, Containerization, NATO systems</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#f59e0b;font-weight:700">68%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5617319652?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full-Stack Developer</a></td>
+          <td>Conexess Group, LLC</td>
+          <td>Miramar, Broward County</td>
+          <td><span class="salary-cell">$72,755.97 - $72,755.97</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Technical development skills align well but lacks the support/troubleshooting experience emphasized in the role.</td>
+          <td class="missing-cell">Help desk experience, Hardware troubleshooting, Enterprise support systems</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://jobicy.com/jobs/140594-software-engineer-ii-2" target="_blank" class="job-link">Software Engineer II</a></td>
+          <td>Affirm</td>
+          <td>UK</td>
+          <td><span class="salary-cell">$60,000 - $85,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Solid software engineering skills with API and full-stack experience align well, but lacks fintech domain knowledge and senior-level system design experience.</td>
+          <td class="missing-cell">Financial services domain, Large-scale distributed systems, Advanced backend frameworks</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://jobicy.com/jobs/140193-senior-software-engineer-fullstack-backend-technologies-poland-remote-2" target="_blank" class="job-link">Senior Software Engineer, Fullstack/Backend Technologies (Poland Remote)</a></td>
+          <td>Turnitin, LLC</td>
+          <td>Poland</td>
+          <td><span class="salary-cell">$70,000 - $95,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Strong technical foundation with relevant fullstack skills, but lacks the senior-level experience and depth typically required for this role.</td>
+          <td class="missing-cell">Senior-level experience, Large-scale system design, Advanced backend frameworks</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5637956350?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Software Engineer</a></td>
+          <td>Intercontinental Exchange Holdings</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$154,921.1 - $154,921.1</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Solid technical skills align with role but lacks seniority and financial/mortgage industry experience for senior position.</td>
+          <td class="missing-cell">Financial Services Domain, Senior-level Experience, Mortgage Technology</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5636143218?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Software Engineer - Safety</a></td>
+          <td>Samsara</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$125,093.46 - $125,093.46</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong data pipeline and API integration experience aligns with IoT platform needs, but lacks specific safety-critical software and fleet management domain expertise.</td>
+          <td class="missing-cell">IoT systems, Safety-critical software, Fleet management domain</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5637956345?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Full Stack Developer</a></td>
+          <td>Intercontinental Exchange Holdings</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$96,184.62 - $96,184.62</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Has solid full-stack development foundation and data pipeline experience, but lacks the senior-level experience and financial industry domain knowledge for this exchange infrastructure role.</td>
+          <td class="missing-cell">Financial markets knowledge, Senior-level experience, Trading systems experience</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5637957556?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Principal Engineer, AI Agent & Full Stack Development</a></td>
+          <td>Intercontinental Exchange Holdings</td>
+          <td>Northlake, DeKalb County</td>
+          <td><span class="salary-cell">$156,332.39 - $156,332.39</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation with AI experience and full-stack development skills, but lacks the senior architecture and leadership experience expected for a Principal Engineer role.</td>
+          <td class="missing-cell">AI/ML model development, System architecture design, Principal-level leadership experience</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5664330366?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Axelon Services Corporation</td>
+          <td>Sandy Springs, Fulton County</td>
+          <td><span class="salary-cell">$86,839.15</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good foundational data skills but role emphasizes logistics and vendor management over core data analysis.</td>
+          <td class="missing-cell">Supply Chain/Logistics Domain Knowledge, Vendor Management, Inventory Management Systems</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5584104988?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Engineer / Senior Data Engineer (GCP, BigQuery)</a></td>
+          <td>Applied Systems Inc</td>
+          <td>Bee Cave, Travis County</td>
+          <td><span class="salary-cell">$117,248.79 - $117,248.79</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good foundational skills in Python and data pipelines, but missing critical GCP and BigQuery experience required for the role.</td>
+          <td class="missing-cell">Google Cloud Platform, BigQuery, Apache Spark</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5646136605?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Data Engineering Lead- AI Engineering & Operations team</a></td>
+          <td>Charles Schwab</td>
+          <td>Bee Cave, Travis County</td>
+          <td><span class="salary-cell">$163,533.81 - $163,533.81</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong data engineering and Python skills align well, but lacks the senior leadership experience and advanced AI engineering background required for this lead role.</td>
+          <td class="missing-cell">Senior-level leadership experience, AI/ML engineering at scale, Cloud platforms (AWS/Azure)</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5657110216?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Java Full Stack Developer (Spring, Angular, Power BI)</a></td>
+          <td>Dutech Systems</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$91,043.71 - $91,043.71</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Java programming skills and SQL database experience provide good foundation, but missing key frameworks and enterprise reporting tools.</td>
+          <td class="missing-cell">Spring Framework, Angular, Power BI</td>
+        </tr>
+        <tr data-city="Austin">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5550982508?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Marketing Data Analyst</a></td>
+          <td>Optimal</td>
+          <td>Austin, Travis County</td>
+          <td><span class="salary-cell">$86,566.2 - $86,566.2</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong data analysis and automation skills but lacks specific marketing analytics and digital advertising performance measurement experience.</td>
+          <td class="missing-cell">Digital marketing analytics, SEO/SEM knowledge, Marketing attribution modeling</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5587819401?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Software Engineer</a></td>
+          <td>DocuSign</td>
+          <td>Times Square, King County</td>
+          <td><span class="salary-cell">$158,417.62 - $158,417.62</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good technical foundation with Python, APIs, and data systems but needs more experience to reach senior level at an enterprise company like DocuSign.</td>
+          <td class="missing-cell">Senior-level Experience, Enterprise Systems, Document Processing</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5664762503?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Java Full Stack Developer</a></td>
+          <td>Deloitte</td>
+          <td>International, King County</td>
+          <td><span class="salary-cell">$149,380.53 - $149,380.53</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with Java background, data pipeline experience, and AI knowledge aligning with Deloitte's AI & Engineering focus, though needs more enterprise Java development experience.</td>
+          <td class="missing-cell">Production Java experience, Enterprise consulting experience, Advanced full-stack architecture</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/4330156573?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Insight Global</td>
+          <td>International, King County</td>
+          <td><span class="salary-cell">$87,774.34 - $87,774.34</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good foundational skills in data pipelines and Python, but lacks the senior-level cloud data warehousing experience and specific AWS/Snowflake expertise required.</td>
+          <td class="missing-cell">AWS, Snowflake, Senior-level Data Engineering Experience</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5639751153?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Data Engineer – Data Warehousing</a></td>
+          <td>Levi, Ray & Shoup</td>
+          <td>Lakewood, Denver</td>
+          <td><span class="salary-cell">$158,482.75 - $158,482.75</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good foundational skills in ETL and data pipelines, but lacks senior-level experience with enterprise-scale data warehousing and cloud technologies.</td>
+          <td class="missing-cell">Cloud Platforms (AWS/Azure), Apache Spark, Enterprise Data Warehousing</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5644398847?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full Stack Developer</a></td>
+          <td>Walter</td>
+          <td>Denver, Colorado</td>
+          <td><span class="salary-cell">$62,873.23 - $62,873.23</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good full-stack development skills with React/Next.js and API experience, but lacks embedded systems and IoT experience for smart home platform development.</td>
+          <td class="missing-cell">Embedded Systems, IoT Development, Hardware Integration</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/4813056757?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Sr. Full Stack Developer</a></td>
+          <td>Joy Lab Consulting, Llc</td>
+          <td>Arvada, Jefferson County</td>
+          <td><span class="salary-cell">$130,000 - $160,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Candidate has relevant full-stack experience with React, Next.js, and FastAPI, but lacks the senior-level depth and extensive full-stack production experience typically required for this role.</td>
+          <td class="missing-cell">Senior-level experience, Advanced React development, Production full-stack architecture</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5664552305?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Finance Data Analyst Senior</a></td>
+          <td>Intermountain Health</td>
+          <td>Glendale, Denver</td>
+          <td><span class="salary-cell">$92,665.84 - $92,665.84</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Good data analysis foundation with SQL and Python skills, but lacks specific finance domain expertise and budgeting experience required for this senior finance role.</td>
+          <td class="missing-cell">Financial analysis expertise, Budgeting experience, Healthcare finance knowledge</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5557439661?se=4r4qZyMg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=8790AA9C3D7B7A76A6D64AB98121465A641737E9" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>University of Chicago</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$50,003 - $65,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Technical skills align well with data analysis requirements, but lacks specialized knowledge in genetics, genomics, and biomedical research domains.</td>
+          <td class="missing-cell">Genomics, Bioinformatics, Clinical Research</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5657140722?se=Rhu_ZyMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=97C81A2697EB7FB032DFCCBAC8360A67600D8DD9" target="_blank" class="job-link">Senior Data Engineer</a></td>
+          <td>Robert Half</td>
+          <td>Boston, Thomas County</td>
+          <td><span class="salary-cell">$150,000 - $170,000</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Has relevant data engineering skills but lacks the senior-level experience and cloud platform expertise typically required for building data platforms from scratch.</td>
+          <td class="missing-cell">Senior-level Experience, Cloud Architecture, Kubernetes</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#f59e0b;font-weight:700">65%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5654625270?se=tNdIaCMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=E5A629F36CD4BE54873DA652385D43F4B855943A" target="_blank" class="job-link">Software Engineer</a></td>
+          <td>Not Disclosed</td>
+          <td>Irvine, Orange County</td>
+          <td><span class="salary-cell">$105,084.9 - $105,084.9</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with Java, SQL, and web development experience, but missing key Microsoft stack technologies like C# and .NET.</td>
+          <td class="missing-cell">C#, .NET, MVC Framework</td>
+        </tr>
+        <tr data-city="Chicago">
+          <td><span style="color:#f59e0b;font-weight:700">62%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/4816849091?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Senior Full Stack Developer</a></td>
+          <td>CWT</td>
+          <td>Chicago, Cook County</td>
+          <td><span class="salary-cell">$131,300.27 - $131,300.27</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical foundation with Java and React experience, but lacks NodeJS and NoSQL experience while having only entry-level experience for a senior role.</td>
+          <td class="missing-cell">NodeJS, MongoDB/NoSQL, Senior-level experience</td>
+        </tr>
+        <tr data-city="Atlanta">
+          <td><span style="color:#f59e0b;font-weight:700">60%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://jobicy.com/jobs/140157-senior-software-engineer-10" target="_blank" class="job-link">Senior Software Engineer</a></td>
+          <td>Twilio</td>
+          <td>USA</td>
+          <td><span class="salary-cell">$140,000 - $180,000</span></td>
+          <td><span class="source-tag">Jobicy</span></td>
+          <td class="reason-cell">Good programming fundamentals and API experience align with communications platform needs, but lacks senior engineering depth and scale experience.</td>
+          <td class="missing-cell">Senior-level experience, Distributed systems, Cloud infrastructure</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#f59e0b;font-weight:700">60%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5665240857?se=5sNEYiMg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=1083EB2C3BC0A97459543B1CD79FE1C53B2BA623" target="_blank" class="job-link">Lead Full-Stack Software Engineer</a></td>
+          <td>CyberCoders</td>
+          <td>Seattle, King County</td>
+          <td><span class="salary-cell">$185,625.94 - $185,625.94</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Has strong full-stack technical skills (Python, React, APIs) but lacks the leadership experience and senior engineering background needed for a lead role.</td>
+          <td class="missing-cell">Team Leadership, System Architecture, Production Scaling</td>
+        </tr>
+        <tr data-city="Seattle">
+          <td><span style="color:#f59e0b;font-weight:700">60%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5477539895?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Sr. Java Full Stack Developer</a></td>
+          <td>Deloitte</td>
+          <td>International, King County</td>
+          <td><span class="salary-cell">$156,376.08 - $156,376.08</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Java skills and data experience provide foundation but lacks the senior-level expertise and consulting background expected for this Deloitte senior role.</td>
+          <td class="missing-cell">Senior Java development, Enterprise consulting, Advanced full-stack leadership</td>
+        </tr>
+        <tr data-city="Denver">
+          <td><span style="color:#f59e0b;font-weight:700">60%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5332020809?se=Uh5KZCMg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=EAD0B8F250B1170B76A5E4299399ACFD1008E1ED" target="_blank" class="job-link">Software Engineer with Security Clearance</a></td>
+          <td>Avenue Technologies and Commodities, Inc</td>
+          <td>Aurora, Arapahoe County</td>
+          <td><span class="salary-cell">$117,629.47 - $117,629.47</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Java programming skills and data processing experience align with satellite ground station work, but lacks required security clearance.</td>
+          <td class="missing-cell">Security clearance, Satellite systems knowledge, Complex algorithms development</td>
+        </tr></tbody>
+    </table>
+  </div>
+</div>
+<div class="section">
+  <div class="section-title">Run History (last 1 days)</div>
+  <div style="overflow-x:auto">
+    <table>
+      <thead><tr>
+        <th>Date</th><th>Scanned</th><th>Excellent</th><th>Total Matches</th><th>Top Pick</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td>Sun, Mar 15, 2026</td>
+          <td>221</td>
+          <td style="color:#22c55e">20</td>
+          <td>156</td>
+          <td>72% — Senior Data Engineer &amp;#8211; Mobility-as-a-service Company @ Truelogic</td>
+        </tr></tbody>
+    </table>
+  </div>
+</div>
+<script>
+  let activeCity="All",searchTerm="";
+  function switchTab(city){
+    activeCity=city;
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.textContent===city));
+    applyFilters();
+  }
+  function filterTable(val){searchTerm=val.toLowerCase();applyFilters();}
+  function applyFilters(){
+    document.querySelectorAll("#jobs-body tr").forEach(row=>{
+      const cityMatch=activeCity==="All"||row.dataset.city===activeCity;
+      const searchMatch=!searchTerm||row.textContent.toLowerCase().includes(searchTerm);
+      row.style.display=cityMatch&&searchMatch?"":"none";
+    });
+  }
+  let sortDir={};
+  function sortTable(col){
+    const tbody=document.getElementById("jobs-body");
+    const rows=Array.from(tbody.querySelectorAll("tr"));
+    sortDir[col]=!sortDir[col];
+    rows.sort((a,b)=>{
+      const A=a.cells[col]?.textContent.trim()||"";
+      const B=b.cells[col]?.textContent.trim()||"";
+      const nA=parseFloat(A),nB=parseFloat(B);
+      if(!isNaN(nA)&&!isNaN(nB))return sortDir[col]?nB-nA:nA-nB;
+      return sortDir[col]?B.localeCompare(A):A.localeCompare(B);
+    });
+    rows.forEach(r=>tbody.appendChild(r));
+  }
+</script>
+</body>
+</html>

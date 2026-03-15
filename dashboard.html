@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Match Dashboard</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:#0a0f1e;color:#e2e8f0;min-height:100vh}
+  .header{background:linear-gradient(135deg,#1e1b4b,#0a0f1e);padding:24px 32px;border-bottom:1px solid #1e293b}
+  .header h1{font-size:22px;font-weight:700;color:#a78bfa}
+  .header p{color:#64748b;font-size:13px;margin-top:4px}
+  .stats{display:flex;gap:12px;padding:20px 32px;flex-wrap:wrap}
+  .stat-card{background:#111827;border:1px solid #1e293b;border-radius:10px;padding:14px 22px;flex:1;min-width:120px}
+  .stat-card .num{font-size:26px;font-weight:700;color:#a78bfa}
+  .stat-card .lbl{font-size:11px;color:#64748b;margin-top:2px}
+  .controls{display:flex;gap:10px;padding:0 32px 16px;align-items:center;flex-wrap:wrap}
+  .tab-btn{padding:6px 16px;border-radius:20px;border:1px solid #334155;background:transparent;color:#94a3b8;cursor:pointer;font-size:13px;transition:all .15s}
+  .tab-btn:hover{border-color:#a78bfa;color:#a78bfa}
+  .tab-btn.active{background:#a78bfa;border-color:#a78bfa;color:#0a0f1e;font-weight:600}
+  .search-box{margin-left:auto;padding:7px 14px;border-radius:8px;border:1px solid #334155;background:#111827;color:#e2e8f0;font-size:13px;width:220px}
+  .search-box:focus{outline:none;border-color:#a78bfa}
+  .section{padding:0 32px 32px}
+  .section-title{font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:#111827;padding:10px 12px;text-align:left;color:#64748b;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;position:sticky;top:0;cursor:pointer}
+  th:hover{color:#a78bfa}
+  td{padding:9px 12px;border-bottom:1px solid #0f172a;vertical-align:top}
+  tr:hover td{background:#111827}
+  .job-link{color:#818cf8;text-decoration:none;font-weight:500}
+  .job-link:hover{color:#a78bfa;text-decoration:underline}
+  .badge{padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+  .source-tag{background:#1e293b;color:#94a3b8;padding:2px 8px;border-radius:6px;font-size:11px}
+  .reason-cell{max-width:240px;color:#94a3b8;font-size:12px}
+  .missing-cell{max-width:160px;color:#f87171;font-size:11px}
+  .salary-cell{color:#22c55e;font-weight:600;font-size:12px}
+  .empty{text-align:center;padding:60px;color:#334155}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🤖 Job Match Dashboard</h1>
+  <p>Last updated: Sat, Mar 14, 2026 · 7 jobs scanned</p>
+</div>
+<div class="stats">
+  <div class="stat-card"><div class="num">5</div><div class="lbl">Matches Today</div></div>
+  <div class="stat-card"><div class="num" style="color:#22c55e">3</div><div class="lbl">Excellent Fits</div></div>
+  <div class="stat-card"><div class="num" style="color:#3b82f6">1</div><div class="lbl">Strong Fits</div></div>
+  <div class="stat-card"><div class="num">1</div><div class="lbl">Days Tracked</div></div>
+  <div class="stat-card"><div class="num">7</div><div class="lbl">Jobs Scanned</div></div>
+</div>
+<div class="controls">
+  <button class="tab-btn active" onclick="switchTab('All')">All</button><button class="tab-btn" onclick="switchTab('Atlanta')">Atlanta</button><button class="tab-btn" onclick="switchTab('Austin')">Austin</button><button class="tab-btn" onclick="switchTab('Seattle')">Seattle</button><button class="tab-btn" onclick="switchTab('Remote')">Remote</button><button class="tab-btn" onclick="switchTab('Various')">Various</button>
+  <input class="search-box" type="text" placeholder="Search title, company..." oninput="filterTable(this.value)">
+</div>
+<div class="section">
+  <div class="section-title">Today's Matches</div>
+  <div style="overflow-x:auto">
+    <table id="jobs-table">
+      <thead><tr>
+        <th onclick="sortTable(0)">Match %</th>
+        <th onclick="sortTable(1)">Category</th>
+        <th onclick="sortTable(2)">Job Title</th>
+        <th onclick="sortTable(3)">Company</th>
+        <th onclick="sortTable(4)">Location</th>
+        <th onclick="sortTable(5)">Salary</th>
+        <th>Source</th>
+        <th>Why It Fits</th>
+        <th>Missing Skills</th>
+      </tr></thead>
+      <tbody id="jobs-body">
+        <tr data-city="Remote">
+          <td><span style="color:#22c55e;font-weight:700">92%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5636286839?se=mMj03iEg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=813E8FBAB56DB431C708677F3B3C8C91A9B3938D" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Cygnus Professionals, Inc.</td>
+          <td>Princeton, Mercer County</td>
+          <td><span class="salary-cell">$75,414.21</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Exceptional match with direct experience in data pipelines, ETL processes, data quality checks, and validation workflows that perfectly align with the role requirements.</td>
+          <td class="missing-cell">BI dashboard development, Advanced data modeling, Business intelligence strategy</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#22c55e;font-weight:700">88%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5643252355?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Mindlance</td>
+          <td>Guilderland, Albany County</td>
+          <td><span class="salary-cell">$62,778.03</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong match with extensive data analysis experience, Python/SQL skills, data quality validation, and ETL pipeline development that align perfectly with data analyst requirements.</td>
+          <td class="missing-cell">Advanced statistical analysis, Business intelligence tools, Data visualization expertise</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#22c55e;font-weight:700">85%</span></td>
+          <td><span class="badge" style="background:#22c55e22;color:#22c55e">Excellent</span></td>
+          <td><a href="https://www.adzuna.com/details/5643228328?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Jobot</td>
+          <td>Las Vegas, Clark County</td>
+          <td><span class="salary-cell">$86,019.84</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Excellent fit with proven data analysis experience, SQL proficiency, and hands-on experience with data validation and quality assurance in operational systems.</td>
+          <td class="missing-cell">Advanced data interpretation, Tech services domain knowledge, Large dataset analysis</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#3b82f6;font-weight:700">78%</span></td>
+          <td><span class="badge" style="background:#3b82f622;color:#3b82f6">Strong</span></td>
+          <td><a href="https://www.adzuna.com/land/ad/5637392604?se=mMj03iEg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=5056CF053A2AACD1506A014259555C23B049CF10" target="_blank" class="job-link">Data Analyst</a></td>
+          <td>Tri-Com Consulting</td>
+          <td>Connecticut, US</td>
+          <td><span class="salary-cell">$90,085.89</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Strong technical fit with data analysis skills, ETL experience, and data management capabilities, though lacks specific healthcare domain expertise.</td>
+          <td class="missing-cell">Healthcare data analysis, Community health assessment, Statewide data management</td>
+        </tr>
+        <tr data-city="Remote">
+          <td><span style="color:#f59e0b;font-weight:700">62%</span></td>
+          <td><span class="badge" style="background:#f59e0b22;color:#f59e0b">Good</span></td>
+          <td><a href="https://www.adzuna.com/details/5617319652?utm_medium=api&utm_source=f3daa386" target="_blank" class="job-link">Full-Stack Developer</a></td>
+          <td>Conexess Group, LLC</td>
+          <td>Miramar, Broward County</td>
+          <td><span class="salary-cell">$72,755.97</span></td>
+          <td><span class="source-tag">Adzuna</span></td>
+          <td class="reason-cell">Has full-stack development skills with Python, FastAPI, React, and TypeScript, but lacks specific experience in technical support and incident management.</td>
+          <td class="missing-cell">Hardware troubleshooting, Incident management systems, End user support</td>
+        </tr></tbody>
+    </table>
+  </div>
+</div>
+<div class="section">
+  <div class="section-title">Run History (last 1 days)</div>
+  <div style="overflow-x:auto">
+    <table>
+      <thead><tr>
+        <th>Date</th><th>Scanned</th><th>Excellent</th><th>Total Matches</th><th>Top Pick</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td>Sat, Mar 14, 2026</td>
+          <td>7</td>
+          <td style="color:#22c55e">3</td>
+          <td>5</td>
+          <td>62% — Full-Stack Developer @ Conexess Group, LLC</td>
+        </tr></tbody>
+    </table>
+  </div>
+</div>
+<script>
+  let activeCity="All",searchTerm="";
+  function switchTab(city){
+    activeCity=city;
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.textContent===city));
+    applyFilters();
+  }
+  function filterTable(val){searchTerm=val.toLowerCase();applyFilters();}
+  function applyFilters(){
+    document.querySelectorAll("#jobs-body tr").forEach(row=>{
+      const cityMatch=activeCity==="All"||row.dataset.city===activeCity;
+      const searchMatch=!searchTerm||row.textContent.toLowerCase().includes(searchTerm);
+      row.style.display=cityMatch&&searchMatch?"":"none";
+    });
+  }
+  let sortDir={};
+  function sortTable(col){
+    const tbody=document.getElementById("jobs-body");
+    const rows=Array.from(tbody.querySelectorAll("tr"));
+    sortDir[col]=!sortDir[col];
+    rows.sort((a,b)=>{
+      const A=a.cells[col]?.textContent.trim()||"";
+      const B=b.cells[col]?.textContent.trim()||"";
+      const nA=parseFloat(A),nB=parseFloat(B);
+      if(!isNaN(nA)&&!isNaN(nB))return sortDir[col]?nB-nA:nA-nB;
+      return sortDir[col]?B.localeCompare(A):A.localeCompare(B);
+    });
+    rows.forEach(r=>tbody.appendChild(r));
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "job-agent",
+  "version": "1.0.0",
+  "description": "AI-powered job matching agent",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.0.0",
+    "nodemailer": "^6.9.0"
+  }
+}
