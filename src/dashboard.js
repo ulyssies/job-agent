@@ -94,7 +94,9 @@ export function generateDashboard(db) {
   .tab-btn{padding:6px 16px;border-radius:20px;border:1px solid #334155;background:transparent;color:#94a3b8;cursor:pointer;font-size:13px;transition:all .15s}
   .tab-btn:hover{border-color:#a78bfa;color:#a78bfa}
   .tab-btn.active{background:#a78bfa;border-color:#a78bfa;color:#0a0f1e;font-weight:600}
-  #run-selector{background:#111827;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer}
+  .run-selector-wrap{display:flex;align-items:center;gap:6px}
+  .run-selector-wrap label{color:#64748b;font-size:12px;font-weight:500}
+  #run-selector{background:#111827;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer;min-width:220px}
   #run-selector:focus{outline:none;border-color:#a78bfa}
   .search-box{margin-left:auto;padding:7px 14px;border-radius:8px;border:1px solid #334155;background:#111827;color:#e2e8f0;font-size:13px;width:220px}
   .search-box:focus{outline:none;border-color:#a78bfa}
@@ -128,9 +130,12 @@ export function generateDashboard(db) {
   <div class="stat-card" id="stat-card-scanned"><div class="num">${latestRun.totalScanned}</div><div class="lbl">Jobs Scanned</div></div>
 </div>
 <div class="controls">
-  <select id="run-selector" onchange="switchRun(parseInt(this.value,10))">
-    ${runSelectorOptions}
-  </select>
+  <div class="run-selector-wrap">
+    <label for="run-selector">Run:</label>
+    <select id="run-selector" onchange="switchRun(parseInt(this.value,10))">
+      ${runSelectorOptions}
+    </select>
+  </div>
   ${tabButtons}
   <input class="search-box" type="text" placeholder="Search title, company..." oninput="filterTable(this.value)">
 </div>
