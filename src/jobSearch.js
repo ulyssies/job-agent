@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TARGET_CITIES, JOB_TITLES } from "../config.js";
+import { TARGET_CITIES, JOB_TITLES, EXCLUDED_KEYWORDS } from "../config.js";
 import { getSeenJobs } from "./database.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -118,17 +118,17 @@ export async function fetchAllJobs() {
   for (const { city, adzunaRegion } of TARGET_CITIES) {
     for (const title of JOB_TITLES) {
       console.log(`  🔍 ${title} in ${city}...`);
-
-      const [jobicyJobs, adzunaJobs] = await Promise.all([
-        fetchJobicy(title),
-        fetchAdzuna(title, city, adzunaRegion),
-      ]);
-
-      addJobs(jobicyJobs, city);
+      const adzunaJobs = await fetchAdzuna(title, city, adzunaRegion);
       addJobs(adzunaJobs, city);
-
       await sleep(500);
     }
+  }
+
+  // Fetch Jobicy once per title (remote-only, city irrelevant)
+  for (const title of JOB_TITLES) {
+    const jobicyJobs = await fetchJobicy(title);
+    addJobs(jobicyJobs, "Remote");
+    await sleep(300);
   }
 
   // Fetch The Muse once per title (not city-specific)
@@ -144,5 +144,13 @@ export async function fetchAllJobs() {
   if (filteredOut > 0) {
     console.log(`  📋 ${filteredOut} jobs filtered out as already seen.`);
   }
-  return filtered;
+
+  const titleHasExcluded = (j) =>
+    EXCLUDED_KEYWORDS.some((kw) => j.title.toLowerCase().includes(kw.toLowerCase()));
+  const afterSeniorFilter = filtered.filter((j) => !titleHasExcluded(j));
+  const seniorFilteredOut = filtered.length - afterSeniorFilter.length;
+  if (seniorFilteredOut > 0) {
+    console.log(`  📋 ${seniorFilteredOut} jobs filtered out as senior-level.`);
+  }
+  return afterSeniorFilter;
 }

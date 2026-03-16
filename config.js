@@ -16,3 +16,18 @@ export const JOB_TITLES = [
 
 export const MIN_MATCH_PERCENT = 60;
 export const TOP_N_EMAIL = 5;
+
+export const EXCLUDED_KEYWORDS = [
+  "Senior",
+  "Sr.",
+  "Lead",
+  "Principal",
+  "Staff",
+  "Manager",
+  "Director",
+  "Head of",
+  "VP",
+  "10+ years",
+  "8+ years",
+  "7+ years",
+];

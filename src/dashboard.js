@@ -22,6 +22,13 @@ export function generateDashboard(db) {
 
   const cities = ["All", ...TARGET_CITIES.map((c) => c.city), "Various"];
 
+  const runSelectorOptions = db.runs
+    .map(
+      (run, i) =>
+        `<option value="${i}">${run.date} — ${run.totalScanned} jobs scanned</option>`
+    )
+    .join("");
+
   const tabButtons = cities
     .map(
       (city, i) =>
@@ -87,6 +94,8 @@ export function generateDashboard(db) {
   .tab-btn{padding:6px 16px;border-radius:20px;border:1px solid #334155;background:transparent;color:#94a3b8;cursor:pointer;font-size:13px;transition:all .15s}
   .tab-btn:hover{border-color:#a78bfa;color:#a78bfa}
   .tab-btn.active{background:#a78bfa;border-color:#a78bfa;color:#0a0f1e;font-weight:600}
+  #run-selector{background:#111827;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer}
+  #run-selector:focus{outline:none;border-color:#a78bfa}
   .search-box{margin-left:auto;padding:7px 14px;border-radius:8px;border:1px solid #334155;background:#111827;color:#e2e8f0;font-size:13px;width:220px}
   .search-box:focus{outline:none;border-color:#a78bfa}
   .section{padding:0 32px 32px}
@@ -112,13 +121,16 @@ export function generateDashboard(db) {
   <p>Last updated: ${latestRun.date} · ${latestRun.totalScanned} jobs scanned</p>
 </div>
 <div class="stats">
-  <div class="stat-card"><div class="num">${allMatches.length}</div><div class="lbl">Matches Today</div></div>
-  <div class="stat-card"><div class="num" style="color:#22c55e">${excellent}</div><div class="lbl">Excellent Fits</div></div>
-  <div class="stat-card"><div class="num" style="color:#3b82f6">${strong}</div><div class="lbl">Strong Fits</div></div>
+  <div class="stat-card" id="stat-card-matches"><div class="num">${allMatches.length}</div><div class="lbl">Matches Today</div></div>
+  <div class="stat-card" id="stat-card-excellent"><div class="num" style="color:#22c55e">${excellent}</div><div class="lbl">Excellent Fits</div></div>
+  <div class="stat-card" id="stat-card-strong"><div class="num" style="color:#3b82f6">${strong}</div><div class="lbl">Strong Fits</div></div>
   <div class="stat-card"><div class="num">${db.runs.length}</div><div class="lbl">Days Tracked</div></div>
-  <div class="stat-card"><div class="num">${latestRun.totalScanned}</div><div class="lbl">Jobs Scanned</div></div>
+  <div class="stat-card" id="stat-card-scanned"><div class="num">${latestRun.totalScanned}</div><div class="lbl">Jobs Scanned</div></div>
 </div>
 <div class="controls">
+  <select id="run-selector" onchange="switchRun(parseInt(this.value,10))">
+    ${runSelectorOptions}
+  </select>
   ${tabButtons}
   <input class="search-box" type="text" placeholder="Search title, company..." oninput="filterTable(this.value)">
 </div>
@@ -153,7 +165,33 @@ export function generateDashboard(db) {
   </div>
 </div>
 <script>
+  const ALL_RUNS = ${JSON.stringify(db.runs).replace(/<\/script>/gi, "<\\/script>")};
+  const MIN_MATCH_PERCENT = ${MIN_MATCH_PERCENT};
+  const CATEGORY_COLORS = ${JSON.stringify(CATEGORY_COLORS)};
+
   let activeCity="All",searchTerm="";
+  function switchRun(index){
+    const run = ALL_RUNS[index];
+    if (!run) return;
+    const allMatches = run.results.filter(r=>r.matchPercent>=MIN_MATCH_PERCENT);
+    const excellent = allMatches.filter(r=>r.matchPercent>=85).length;
+    const strong = allMatches.filter(r=>r.matchPercent>=70&&r.matchPercent<85).length;
+    const rowsHtml = [...allMatches].sort((a,b)=>b.matchPercent-a.matchPercent).map(r=>{
+      const color = CATEGORY_COLORS[r.matchCategory]||"#94a3b8";
+      const city = (r.targetCity||"").replace(/"/g,"&quot;");
+      return "<tr data-city=\\\""+city+"\\\"><td><span style=\\\"color:"+color+";font-weight:700\\\">"+r.matchPercent+"%</span></td><td><span class=\\\"badge\\\" style=\\\"background:"+color+"22;color:"+color+"\\\">"+(r.matchCategory||"")+"</span></td><td><a href=\\\""+(r.applyLink||"#").replace(/"/g,"&quot;")+"\\\" target=\\\"_blank\\\" class=\\\"job-link\\\">"+(r.title||"").replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</a></td><td>"+(r.company||"").replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</td><td>"+(r.location||"").replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</td><td><span class=\\\"salary-cell\\\">"+(r.estimatedSalary!=null?r.estimatedSalary.replace(/</g,"&lt;").replace(/>/g,"&gt;"):"—")+"</span></td><td><span class=\\\"source-tag\\\">"+(r.source||"").replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</span></td><td class=\\\"reason-cell\\\">"+(r.reason||"").replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</td><td class=\\\"missing-cell\\\">"+((r.missingSkills||[]).join(", ")||"—").replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</td></tr>";
+    }).join("");
+    document.getElementById("jobs-body").innerHTML = rowsHtml || "<tr><td colspan=\\\"9\\\" class=\\\"empty\\\">No matches found above threshold.</td></tr>";
+    document.querySelector("#stat-card-matches .num").textContent = allMatches.length;
+    const excEl = document.querySelector("#stat-card-excellent .num");
+    excEl.textContent = excellent;
+    excEl.style.color = "#22c55e";
+    const strEl = document.querySelector("#stat-card-strong .num");
+    strEl.textContent = strong;
+    strEl.style.color = "#3b82f6";
+    document.querySelector("#stat-card-scanned .num").textContent = run.totalScanned;
+    applyFilters();
+  }
   function switchTab(city){
     activeCity=city;
     document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.textContent===city));

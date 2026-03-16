@@ -1,6 +1,950 @@
 {
   "runs": [
     {
+      "id": 1773626444993,
+      "date": "Sun, Mar 15, 2026",
+      "timestamp": "2026-03-16T02:00:44.993Z",
+      "totalScanned": 52,
+      "results": [
+        {
+          "matchPercent": 78,
+          "matchCategory": "Strong",
+          "reason": "Strong match with data pipeline experience, Python/SQL skills, and data quality expertise aligning well with data engineering requirements.",
+          "missingSkills": [
+            "Spark/Hadoop",
+            "Cloud platforms (AWS/Azure)",
+            "Docker/Kubernetes"
+          ],
+          "estimatedSalary": "$85,531.73",
+          "title": "Data Engineer",
+          "company": "Cargill",
+          "location": "Atlanta, Fulton County",
+          "targetCity": "Atlanta",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5665940670?se=ANg-rtsg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=AE5D0F397F0D9C46F939030A37501EE20442CC51",
+          "postedAt": "2026-03-14T20:52:05Z"
+        },
+        {
+          "matchPercent": 82,
+          "matchCategory": "Strong",
+          "reason": "Excellent fit with ETL pipeline experience, API integrations, and data validation skills matching core data engineering responsibilities.",
+          "missingSkills": [
+            "Apache Kafka",
+            "Apache Airflow",
+            "AWS/Azure cloud services"
+          ],
+          "estimatedSalary": "$127,244.44",
+          "title": "Data Engineer - REMOTE",
+          "company": "HHS Technology Group, Inc.",
+          "location": "Atlanta, Fulton County",
+          "targetCity": "Atlanta",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5643244837?se=ANg-rtsg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=1FC00F8577C3469F86C7BC9C7012A83DECE7B880",
+          "postedAt": "2026-02-24T01:30:27Z"
+        },
+        {
+          "matchPercent": 45,
+          "matchCategory": "Fair",
+          "reason": "Limited match as role focuses on infrastructure telemetry systems rather than data pipelines and applications.",
+          "missingSkills": [
+            "Go/Rust",
+            "Distributed systems",
+            "Infrastructure monitoring tools"
+          ],
+          "estimatedSalary": "$95,000 - $130,000",
+          "title": "Infrastructure Software Engineer, Telemetry",
+          "company": "Dropbox",
+          "location": "Poland",
+          "targetCity": "Atlanta",
+          "source": "Jobicy",
+          "applyLink": "https://jobicy.com/jobs/140676-infrastructure-software-engineer-telemetry",
+          "postedAt": "2026-03-15T17:58:58+00:00"
+        },
+        {
+          "matchPercent": 72,
+          "matchCategory": "Strong",
+          "reason": "Good match with full-stack development skills and API experience, though lacking senior-level expertise for this role.",
+          "missingSkills": [
+            "React Native",
+            "Microservices architecture",
+            "Senior-level system design"
+          ],
+          "estimatedSalary": "$137,265.31",
+          "title": "REMOTE Sr Software Engineer - SaaS Startup",
+          "company": "CyberCoders",
+          "location": "Atlanta, Fulton County",
+          "targetCity": "Atlanta",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5663715102?se=Hpi1rtsg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=5FBA4DFC6AF0E74CE3214C5C4F5AD211CE980C1E",
+          "postedAt": "2026-03-13T12:30:46Z"
+        },
+        {
+          "matchPercent": 58,
+          "matchCategory": "Good",
+          "reason": "Moderate fit with software engineering background but lacks specific network security and platform engineering experience.",
+          "missingSkills": [
+            "Network protocols",
+            "Security frameworks",
+            "Distributed systems at scale"
+          ],
+          "estimatedSalary": "$204,077.95",
+          "title": "Software Engineer III | Platform",
+          "company": "ExtraHop",
+          "location": "Northlake, DeKalb County",
+          "targetCity": "Atlanta",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5597183657?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-01-23T10:26:26Z"
+        },
+        {
+          "matchPercent": 75,
+          "matchCategory": "Strong",
+          "reason": "Strong match for entry-level software engineering with relevant programming skills and fresh CS graduate background.",
+          "missingSkills": [
+            "Enterprise software patterns",
+            "CI/CD pipelines",
+            "Unit testing frameworks"
+          ],
+          "estimatedSalary": "$76,032.01",
+          "title": "Professional, Software Engineering",
+          "company": "Cargill",
+          "location": "Atlanta, Fulton County",
+          "targetCity": "Atlanta",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5595452077?se=Hpi1rtsg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=A1A525C3FF22AE9534C4543783B217B6EBF489B8",
+          "postedAt": "2026-01-22T09:36:58Z"
+        },
+        {
+          "matchPercent": 52,
+          "matchCategory": "Fair",
+          "reason": "Fair match with general programming skills but lacks Golang expertise and backend service development experience.",
+          "missingSkills": [
+            "Golang",
+            "Container orchestration",
+            "Backend service architecture"
+          ],
+          "estimatedSalary": "$72,848.93",
+          "title": "Software Engineer (Golang)",
+          "company": "Cargill",
+          "location": "Atlanta, Fulton County",
+          "targetCity": "Atlanta",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5608769765?se=Hpi1rtsg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=3614282358F1E1839AE8153C4513BBF150D495ED",
+          "postedAt": "2026-02-01T10:07:25Z"
+        },
+        {
+          "matchPercent": 74,
+          "matchCategory": "Strong",
+          "reason": "Strong match with full-stack development experience using React, FastAPI, and database integration skills.",
+          "missingSkills": [
+            "Angular/Vue.js",
+            "DevOps practices",
+            "Authentication systems"
+          ],
+          "estimatedSalary": "$85,000 - $115,000",
+          "title": "Full Stack Software Developer",
+          "company": "ECS",
+          "location": "USA",
+          "targetCity": "Atlanta",
+          "source": "Jobicy",
+          "applyLink": "https://jobicy.com/jobs/140688-full-stack-software-developer",
+          "postedAt": "2026-03-15T17:59:55+00:00"
+        },
+        {
+          "matchPercent": 76,
+          "matchCategory": "Strong",
+          "reason": "Strong match with full-stack skills, API integration experience, and React/TypeScript proficiency for rideshare platform development.",
+          "missingSkills": [
+            "Mobile development",
+            "Third-party API partnerships",
+            "High-scale transaction processing"
+          ],
+          "estimatedSalary": "$109,655.8",
+          "title": "Full Stack Developer- TNC",
+          "company": "The Hertz Corporation",
+          "location": "Atlanta, Fulton County",
+          "targetCity": "Atlanta",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5538612431?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2025-12-11T19:06:56Z"
+        },
+        {
+          "matchPercent": 88,
+          "matchCategory": "Excellent",
+          "reason": "Excellent match with data analysis experience, data quality expertise, and strong technical skills for healthcare data analyst role.",
+          "missingSkills": [
+            "Healthcare domain knowledge",
+            "Advanced statistical analysis",
+            "Business intelligence tools"
+          ],
+          "estimatedSalary": "$99,916.94",
+          "title": "Payor Data Analyst- Remote",
+          "company": "Sharecare",
+          "location": "Atlanta, Fulton County",
+          "targetCity": "Atlanta",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5599730742?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-01-24T21:59:25Z"
+        },
+        {
+          "matchPercent": 72,
+          "matchCategory": "Strong",
+          "reason": "Strong data engineering foundation with Python, SQL, and ETL experience, but lacks the senior architect-level experience and cloud infrastructure design skills typically required for this role.",
+          "missingSkills": [
+            "Cloud architecture design",
+            "Enterprise-scale solutions",
+            "Team leadership"
+          ],
+          "estimatedSalary": "$120,708.84 - $120,708.84",
+          "title": "Data Engineering Solutions Architect",
+          "company": "Jobot",
+          "location": "Austin, Travis County",
+          "targetCity": "Austin",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5643256726?se=jOFgsNsg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=1113F1C052A6A3F8B2D59B19F07C10A2C81DEB0C",
+          "postedAt": "2026-02-24T01:32:53Z"
+        },
+        {
+          "matchPercent": 78,
+          "matchCategory": "Strong",
+          "reason": "Excellent match for data pipeline development and Python skills, with some ML exposure through LLM evaluation, but needs more cloud and distributed systems experience.",
+          "missingSkills": [
+            "Cloud platforms (AWS/GCP/Azure)",
+            "ML platform development",
+            "Distributed systems"
+          ],
+          "estimatedSalary": "$150,000 - $200,000",
+          "title": "Data Engineer",
+          "company": "Hired Recruiters",
+          "location": "Austin, Travis County",
+          "targetCity": "Austin",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5330798359?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2025-07-31T18:29:59Z"
+        },
+        {
+          "matchPercent": 75,
+          "matchCategory": "Strong",
+          "reason": "Strong data engineering skills and US citizenship requirement met, but lacks enterprise-level cloud experience and security clearance background.",
+          "missingSkills": [
+            "Cloud platforms",
+            "Security clearance eligibility",
+            "Enterprise data systems"
+          ],
+          "estimatedSalary": "$183,757.14 - $183,757.14",
+          "title": "Data Engineer",
+          "company": "RTX Corporation",
+          "location": "Tarrytown, Travis County",
+          "targetCity": "Austin",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5665821887?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-03-14T18:00:31Z"
+        },
+        {
+          "matchPercent": 82,
+          "matchCategory": "Strong",
+          "reason": "Excellent technical fit with data pipeline, API integration, and data quality experience that aligns well with property data processing needs.",
+          "missingSkills": [
+            "Real estate domain knowledge",
+            "Production data infrastructure",
+            "Advanced SQL optimization"
+          ],
+          "estimatedSalary": "$113,790.1 - $113,790.1",
+          "title": "Data Engineer",
+          "company": "Ownwell",
+          "location": "Austin, Travis County",
+          "targetCity": "Austin",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5599327796?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-01-24T15:07:47Z"
+        },
+        {
+          "matchPercent": 68,
+          "matchCategory": "Good",
+          "reason": "Has relevant programming skills and some Java experience, but lacks the required 8+ years of experience and advanced object-oriented programming depth.",
+          "missingSkills": [
+            "8+ years experience",
+            "Advanced Java/C++",
+            "System architecture"
+          ],
+          "estimatedSalary": "$93,552.46 - $93,552.46",
+          "title": "Software Engineer 3",
+          "company": "Link Technologies",
+          "location": "Austin, Travis County",
+          "targetCity": "Austin",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5664897246?se=NE7YsNsg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=49F6E71C3330D86FD9C482602B4297EE62639779",
+          "postedAt": "2026-03-14T02:09:10Z"
+        },
+        {
+          "matchPercent": 71,
+          "matchCategory": "Strong",
+          "reason": "Strong full-stack development skills with Python, APIs, and React that match technical requirements, but lacks customer-facing deployment experience.",
+          "missingSkills": [
+            "Customer deployment experience",
+            "Hardware testing domain",
+            "DevOps/deployment"
+          ],
+          "estimatedSalary": "$193,098.86 - $193,098.86",
+          "title": "Forward Deployed Software Engineer",
+          "company": "Jobot",
+          "location": "Austin, Travis County",
+          "targetCity": "Austin",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5643257958?se=NE7YsNsg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=EA602F1C884EC9929E7AF46F617F3F4B2332ACA3",
+          "postedAt": "2026-02-24T01:33:06Z"
+        },
+        {
+          "matchPercent": 79,
+          "matchCategory": "Strong",
+          "reason": "Strong AI/ML foundation through LLM evaluation work and full-stack development skills, but needs more years of experience and deeper ML framework knowledge.",
+          "missingSkills": [
+            "5+ years experience",
+            "Advanced ML frameworks",
+            "Production AI systems"
+          ],
+          "estimatedSalary": "$177,534.08 - $177,534.08",
+          "title": "AI/ML Software Engineer",
+          "company": "eStaffLLC",
+          "location": "Camp Mabry, Travis County",
+          "targetCity": "Austin",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5637392605?se=NE7YsNsg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=561AF2E9160217ED4C9178962BBBBD97E843FF5C",
+          "postedAt": "2026-02-20T01:05:14Z"
+        },
+        {
+          "matchPercent": 85,
+          "matchCategory": "Excellent",
+          "reason": "Excellent match with strong data analysis background, SQL skills, and experience investigating data quality issues that translates well to fraud detection.",
+          "missingSkills": [
+            "Financial domain expertise",
+            "Advanced statistical analysis",
+            "Fraud detection techniques"
+          ],
+          "estimatedSalary": "$117,621.51 - $117,621.51",
+          "title": "Data Analyst / Associate Data Scientist",
+          "company": "IntegraFEC",
+          "location": "Austin, Travis County",
+          "targetCity": "Austin",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5600495429?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-01-25T18:03:23Z"
+        },
+        {
+          "matchPercent": 73,
+          "matchCategory": "Strong",
+          "reason": "Strong SQL and data engineering fundamentals, but lacks specific Azure Synapse experience and advanced cloud analytics platform knowledge.",
+          "missingSkills": [
+            "Azure Synapse",
+            "Advanced SQL optimization",
+            "Cloud data warehousing"
+          ],
+          "estimatedSalary": "$130,237.11 - $130,237.11",
+          "title": "Data Engineer Synapse",
+          "company": "Capgemini",
+          "location": "Bellevue, King County",
+          "targetCity": "Seattle",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5578987135?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-01-10T22:39:09Z"
+        },
+        {
+          "matchPercent": 76,
+          "matchCategory": "Strong",
+          "reason": "Good technical foundation with data pipelines and system design, but needs more experience with AWS cloud services and large-scale data processing.",
+          "missingSkills": [
+            "AWS services",
+            "Large-scale distributed systems",
+            "Senior-level experience"
+          ],
+          "estimatedSalary": "$222,817.61 - $222,817.61",
+          "title": "Data Engineer II - AMZ9675635",
+          "company": "Amazon",
+          "location": "International, King County",
+          "targetCity": "Seattle",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5666117859?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-03-15T00:23:21Z"
+        },
+        {
+          "matchPercent": 78,
+          "matchCategory": "Strong",
+          "reason": "Strong match with relevant data pipeline experience, Python/SQL skills, and internship-level requirements align well with current experience level.",
+          "missingSkills": [
+            "AWS/Cloud platforms",
+            "Apache Spark",
+            "Docker/Kubernetes"
+          ],
+          "estimatedSalary": "$87,774.76 - $87,774.76",
+          "title": "Data Engineer Internship - 2026 (US)",
+          "company": "Amazon",
+          "location": "International, King County",
+          "targetCity": "Seattle",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5664758151?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-03-14T00:22:31Z"
+        },
+        {
+          "matchPercent": 82,
+          "matchCategory": "Strong",
+          "reason": "Excellent alignment with data engineering focus, ETL pipeline experience, and cloud-based analytics perfectly match the role requirements.",
+          "missingSkills": [
+            "AWS/Azure",
+            "Apache Airflow",
+            "Scala"
+          ],
+          "estimatedSalary": "$62,150.16 - $62,150.16",
+          "title": "Data Engineer",
+          "company": "Beacon Engineering Resources",
+          "location": "Seattle, King County",
+          "targetCity": "Seattle",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5618025630?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-02-06T16:04:11Z"
+        },
+        {
+          "matchPercent": 75,
+          "matchCategory": "Strong",
+          "reason": "Good technical foundation with data engineering experience, though may need additional infrastructure and streaming technologies expertise.",
+          "missingSkills": [
+            "Terraform",
+            "Kubernetes",
+            "Apache Kafka"
+          ],
+          "estimatedSalary": "$110,000 - $150,000",
+          "title": "Data Engineer",
+          "company": "Cerium Networks",
+          "location": "Capitol Hill, King County",
+          "targetCity": "Seattle",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5597301885?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-01-23T12:39:47Z"
+        },
+        {
+          "matchPercent": 68,
+          "matchCategory": "Good",
+          "reason": "Has TypeScript and React experience but lacks the full-stack depth and startup-level seniority typically expected for this salary range.",
+          "missingSkills": [
+            "Advanced React patterns",
+            "Node.js backend",
+            "GraphQL"
+          ],
+          "estimatedSalary": "$130,308.3 - $130,308.3",
+          "title": "Software Engineer (Typescript)",
+          "company": "Jobot",
+          "location": "Seattle, King County",
+          "targetCity": "Seattle",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5643256061?se=aqi5stsg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=59A553CCA2AD47097100F9013DA660919A7B8E18",
+          "postedAt": "2026-02-24T01:32:45Z"
+        },
+        {
+          "matchPercent": 62,
+          "matchCategory": "Good",
+          "reason": "Solid programming foundation but needs more senior-level experience in large-scale system development for a company like Uber.",
+          "missingSkills": [
+            "System design",
+            "Microservices",
+            "Production scalability"
+          ],
+          "estimatedSalary": "$157,265.94 - $157,265.94",
+          "title": "Software Engineer",
+          "company": "Uber",
+          "location": "International, King County",
+          "targetCity": "Seattle",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5666121825?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-03-15T00:26:52Z"
+        },
+        {
+          "matchPercent": 58,
+          "matchCategory": "Good",
+          "reason": "Technical skills are relevant but lacks the senior leadership and architecture experience expected for a Software Engineer III role.",
+          "missingSkills": [
+            "Leadership experience",
+            "System architecture",
+            "Performance optimization"
+          ],
+          "estimatedSalary": "$183,177.3 - $183,177.3",
+          "title": "Software Engineer III",
+          "company": "Walmart",
+          "location": "Bellevue, King County",
+          "targetCity": "Seattle",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5604325241?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-01-28T23:06:25Z"
+        },
+        {
+          "matchPercent": 35,
+          "matchCategory": "Low",
+          "reason": "Entry-level experience doesn't align with distinguished engineer requirements needing extensive leadership and architectural expertise.",
+          "missingSkills": [
+            "Distinguished-level leadership",
+            "AI/ML architecture",
+            "Team management"
+          ],
+          "estimatedSalary": "$271,480.7 - $271,480.7",
+          "title": "Distinguished, Software Engineer",
+          "company": "Walmart",
+          "location": "Bellevue, King County",
+          "targetCity": "Seattle",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5528615795?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2025-12-04T19:05:50Z"
+        },
+        {
+          "matchPercent": 72,
+          "matchCategory": "Strong",
+          "reason": "Strong full-stack development skills with relevant AI experience, though lacking consulting and client-facing experience.",
+          "missingSkills": [
+            "Consulting experience",
+            "Client management",
+            "Enterprise architecture"
+          ],
+          "estimatedSalary": "$117,268.58 - $117,268.58",
+          "title": "Engineering Foundry - Software Engineering Full-stack Developer- Consultant",
+          "company": "Deloitte",
+          "location": "International, King County",
+          "targetCity": "Seattle",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5664762387?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-03-14T00:23:58Z"
+        },
+        {
+          "matchPercent": 85,
+          "matchCategory": "Excellent",
+          "reason": "Excellent match with data analysis experience, SQL proficiency, and data quality focus directly aligning with analyst requirements.",
+          "missingSkills": [
+            "Tableau advanced features",
+            "Statistical modeling",
+            "A/B testing"
+          ],
+          "estimatedSalary": "$85,000 - $105,000",
+          "title": "Data Analyst I",
+          "company": "Stackline",
+          "location": "Seattle, King County",
+          "targetCity": "Seattle",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5650296032?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-03-01T12:57:19Z"
+        },
+        {
+          "matchPercent": 79,
+          "matchCategory": "Strong",
+          "reason": "Strong data engineering background with relevant big data pipeline experience, though needs exposure to specific big data technologies.",
+          "missingSkills": [
+            "Apache Spark",
+            "Hadoop ecosystem",
+            "Media industry knowledge"
+          ],
+          "estimatedSalary": "$116,315.83 - $116,315.83",
+          "title": "Data Engineer",
+          "company": "Cadmus",
+          "location": "Glendale, Denver",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5649223148?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-02-28T19:53:12Z"
+        },
+        {
+          "matchPercent": 75,
+          "matchCategory": "Strong",
+          "reason": "Strong match with data pipeline experience, Python/SQL skills, and data quality focus, though lacks large-scale distributed systems experience.",
+          "missingSkills": [
+            "AWS/Cloud platforms",
+            "Spark/Hadoop",
+            "Docker/Kubernetes"
+          ],
+          "estimatedSalary": "$90,000 - $120,000",
+          "title": "Data Engineer",
+          "company": "ForceMetrics",
+          "location": "Denver, Colorado",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5385792895?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2025-09-05T19:46:42Z"
+        },
+        {
+          "matchPercent": 72,
+          "matchCategory": "Strong",
+          "reason": "Good technical foundation with data engineering skills and API integration experience, but may lack enterprise-scale data solutions experience.",
+          "missingSkills": [
+            "Advanced analytics",
+            "Machine learning",
+            "Scala"
+          ],
+          "estimatedSalary": "$73,944.01",
+          "title": "Data Engineer",
+          "company": "Sand Cherry Associates",
+          "location": "Denver, Colorado",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5662244264?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-03-12T07:11:10Z"
+        },
+        {
+          "matchPercent": 68,
+          "matchCategory": "Good",
+          "reason": "Has relevant data pipeline and ETL experience but lacks the large-scale distributed systems experience this senior role requires.",
+          "missingSkills": [
+            "Distributed systems",
+            "Kafka/Spark",
+            "Large-scale architecture"
+          ],
+          "estimatedSalary": "$120,000 - $160,000",
+          "title": "Data Engineer",
+          "company": "Kharon",
+          "location": "Denver, Colorado",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5614626273?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-02-04T16:41:50Z"
+        },
+        {
+          "matchPercent": 65,
+          "matchCategory": "Good",
+          "reason": "Strong data pipeline foundation but missing key cloud technologies like AWS, Databricks, and Snowflake required for this role.",
+          "missingSkills": [
+            "AWS",
+            "Databricks",
+            "Snowflake"
+          ],
+          "estimatedSalary": "$151,722.23",
+          "title": "Data Engineer",
+          "company": "Insight Global",
+          "location": "Glendale, Denver",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5630359071?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-02-14T20:15:26Z"
+        },
+        {
+          "matchPercent": 58,
+          "matchCategory": "Good",
+          "reason": "Has relevant API integration and programming skills but lacks the specific integration technologies and Go language experience required.",
+          "missingSkills": [
+            "JQ",
+            "Go Template",
+            "Go Language"
+          ],
+          "estimatedSalary": "$122,024.02",
+          "title": "Specialist II - Software Engineering",
+          "company": "Axelon Services Corporation",
+          "location": "Englewood, Arapahoe County",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5643224110?se=xsiztNsg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=950B70F21C9E15EF8C7121F1AD2272DEBC6B2FF2",
+          "postedAt": "2026-02-24T01:25:20Z"
+        },
+        {
+          "matchPercent": 45,
+          "matchCategory": "Fair",
+          "reason": "Limited software engineering experience and lacks the required TS/SCI clearance and government sector background.",
+          "missingSkills": [
+            "Security clearance",
+            "Government systems",
+            "C++"
+          ],
+          "estimatedSalary": "$169,504.40",
+          "title": "Software Engineer",
+          "company": "CACI International",
+          "location": "Glendale, Denver",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5649223028?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-02-28T19:53:12Z"
+        },
+        {
+          "matchPercent": 62,
+          "matchCategory": "Good",
+          "reason": "Has solid programming foundation but lacks healthcare industry experience and enterprise-level software development background.",
+          "missingSkills": [
+            "Healthcare domain",
+            "Enterprise software",
+            "Microservices"
+          ],
+          "estimatedSalary": "$132,119.98",
+          "title": "Software Engineer",
+          "company": "Evolent",
+          "location": "Glendale, Denver",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5589988993?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-01-17T19:33:54Z"
+        },
+        {
+          "matchPercent": 70,
+          "matchCategory": "Strong",
+          "reason": "Strong data analysis and ETL pipeline experience aligns well, but lacks specific Informatica platform expertise.",
+          "missingSkills": [
+            "Informatica ETL",
+            "ETL migration",
+            "Administration"
+          ],
+          "estimatedSalary": "$84,239.58",
+          "title": "Data Analyst",
+          "company": "nLeague",
+          "location": "Denver, Colorado",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5644643738?se=ahfPtdsg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=D3D91B8105CAA39A96574036D23BD7502229ED45",
+          "postedAt": "2026-02-25T03:21:08Z"
+        },
+        {
+          "matchPercent": 78,
+          "matchCategory": "Strong",
+          "reason": "Excellent match with data analysis skills, SQL proficiency, and experience with data validation and quality assurance.",
+          "missingSkills": [
+            "Business intelligence",
+            "Telecom domain",
+            "Advanced statistics"
+          ],
+          "estimatedSalary": "$93,115.33",
+          "title": "Data Analyst",
+          "company": "EchoStar",
+          "location": "Englewood, Arapahoe County",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5614868020?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-02-04T19:47:30Z"
+        },
+        {
+          "matchPercent": 80,
+          "matchCategory": "Strong",
+          "reason": "Strong alignment with data analysis experience, Python/SQL skills, and data quality focus suitable for this analyst role.",
+          "missingSkills": [
+            "Advanced analytics",
+            "Business intelligence tools",
+            "Telecom industry"
+          ],
+          "estimatedSalary": "$97,140.29",
+          "title": "Data Analyst II",
+          "company": "EchoStar",
+          "location": "Englewood, Arapahoe County",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5614868026?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-02-04T19:47:30Z"
+        },
+        {
+          "matchPercent": 75,
+          "matchCategory": "Strong",
+          "reason": "Strong technical skills in data analysis and SQL with relevant experience in data quality and validation, though lacks specific payments industry knowledge.",
+          "missingSkills": [
+            "Financial/Payments Domain Knowledge",
+            "Advanced Analytics",
+            "Tableau/PowerBI"
+          ],
+          "estimatedSalary": "$86,845.77 - $86,845.77",
+          "title": "Payments Data Analyst",
+          "company": "EchoStar",
+          "location": "Englewood, Arapahoe County",
+          "targetCity": "Denver",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5646790293?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-02-26T19:55:04Z"
+        },
+        {
+          "matchPercent": 82,
+          "matchCategory": "Strong",
+          "reason": "Excellent match with strong Python, SQL, and ETL pipeline experience, plus data quality expertise that aligns well with data engineering requirements.",
+          "missingSkills": [
+            "Apache Spark",
+            "Kafka",
+            "Cloud Data Platforms"
+          ],
+          "estimatedSalary": "$98,297.91 - $98,297.91",
+          "title": "Data Engineer",
+          "company": "Midtown Athletic Clubs",
+          "location": "Chicago, Cook County",
+          "targetCity": "Chicago",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/details/5667594212?utm_medium=api&utm_source=f3daa386",
+          "postedAt": "2026-03-15T13:33:18Z"
+        },
+        {
+          "matchPercent": 65,
+          "matchCategory": "Good",
+          "reason": "Good Python and API development skills with full-stack experience, but lacks specific Django framework and supply chain industry experience.",
+          "missingSkills": [
+            "Django Framework",
+            "Supply Chain Domain",
+            "Production Django Experience"
+          ],
+          "estimatedSalary": "$81,822.56 - $81,822.56",
+          "title": "Python/Django Software Engineer (3 month contract)",
+          "company": "CyberCoders",
+          "location": "Chicago, Cook County",
+          "targetCity": "Chicago",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5666201768?se=lP-7ttsg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=E6AF2606B3338FA41403841C84F61A88067F10AB",
+          "postedAt": "2026-03-15T03:43:20Z"
+        },
+        {
+          "matchPercent": 58,
+          "matchCategory": "Good",
+          "reason": "Solid data engineering fundamentals but lacks specific Azure platform experience and senior-level experience requirement.",
+          "missingSkills": [
+            "Azure Data Factory",
+            "Microsoft Azure Stack",
+            "8+ Years Experience"
+          ],
+          "estimatedSalary": "$75,195.24 - $75,195.24",
+          "title": "Data Engineer",
+          "company": "THE PRUITT GROUP LLC",
+          "location": "New Orleans, Orleans Parish",
+          "targetCity": "Remote",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5652448990?se=svk4uNsg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=398C8B1DFBA30CA78BCB131209DAAB2801F2413C",
+          "postedAt": "2026-03-03T10:29:26Z"
+        },
+        {
+          "matchPercent": 45,
+          "matchCategory": "Fair",
+          "reason": "Good technical skills but lacks required security clearance and specialized defense/cyber domain experience.",
+          "missingSkills": [
+            "Security Clearance",
+            "DoD/Cyber Domain",
+            "Scala/Big Data Tools"
+          ],
+          "estimatedSalary": "$124,371.17 - $124,371.17",
+          "title": "Data Engineer",
+          "company": "Skycubed",
+          "location": "San Diego, San Diego County",
+          "targetCity": "Remote",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5654997075?se=svk4uNsg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=C4DE0458812D2CE9F8CB6F8D83F99C3E0FFC7642",
+          "postedAt": "2026-03-05T10:17:04Z"
+        },
+        {
+          "matchPercent": 52,
+          "matchCategory": "Fair",
+          "reason": "Strong foundational skills but lacks the required 8 years of experience and specific AWS cloud platform expertise.",
+          "missingSkills": [
+            "AWS Expertise",
+            "8+ Years Experience",
+            "Data Warehousing"
+          ],
+          "estimatedSalary": "$88,319.29 - $88,319.29",
+          "title": "Data Engineer AWS - US Citizens",
+          "company": "FRACSYS INC",
+          "location": "Leesburg, Loudoun County",
+          "targetCity": "Remote",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5639892899?se=svk4uNsg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=58F46D8F99C58DCD19510D888991F3550FEB3355",
+          "postedAt": "2026-02-21T11:00:37Z"
+        },
+        {
+          "matchPercent": 68,
+          "matchCategory": "Good",
+          "reason": "Good data engineering skills and Python experience, though needs more exposure to enterprise big data technologies.",
+          "missingSkills": [
+            "Hadoop/Spark",
+            "Big Data Platforms",
+            "Advanced ETL Tools"
+          ],
+          "estimatedSalary": "$89,040.26 - $89,040.26",
+          "title": "Big Data Engineer",
+          "company": "CEI",
+          "location": "Strongsville, Cuyahoga County",
+          "targetCity": "Remote",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5665447300?se=svk4uNsg8RG6mYysgQXxLQ&utm_medium=api&utm_source=f3daa386&v=A6FE34026885BEA80E0233BE12C3F483AFFF8828",
+          "postedAt": "2026-03-14T11:51:25Z"
+        },
+        {
+          "matchPercent": 42,
+          "matchCategory": "Fair",
+          "reason": "General software engineering skills present but lacks specialized semiconductor equipment and hardware experience.",
+          "missingSkills": [
+            "Semiconductor Domain",
+            "Embedded Systems",
+            "Hardware Integration"
+          ],
+          "estimatedSalary": "$62,965.94 - $62,965.94",
+          "title": "Software Engineer",
+          "company": "Uptime Crew",
+          "location": "South Burlington, Chittenden County",
+          "targetCity": "Remote",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5666271951?se=7szOuNsg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=1841390B3C78374D99D25226B677488DF43AD48A",
+          "postedAt": "2026-03-15T05:47:39Z"
+        },
+        {
+          "matchPercent": 78,
+          "matchCategory": "Strong",
+          "reason": "Strong full-stack development skills with React, TypeScript, and API experience, though may need .NET stack knowledge.",
+          "missingSkills": [
+            "C#/.NET",
+            "Milwaukee Location",
+            "Enterprise Web Apps"
+          ],
+          "estimatedSalary": "$80,000.66 - $80,000.66",
+          "title": "Full Stack Developer",
+          "company": "Mindful Measures Inc",
+          "location": "Milwaukee, Milwaukee County",
+          "targetCity": "Remote",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5630884455?se=qgVSudsg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=655387CF0691EE50F526E692E5A8B980CA1A1839",
+          "postedAt": "2026-02-15T10:45:21Z"
+        },
+        {
+          "matchPercent": 81,
+          "matchCategory": "Strong",
+          "reason": "Excellent match with strong SQL, full-stack development experience, and proven API integration skills.",
+          "missingSkills": [
+            "Backend Frameworks",
+            "Database Administration",
+            "Enterprise Architecture"
+          ],
+          "estimatedSalary": "$90,007.05 - $90,007.05",
+          "title": "Full Stack Developer",
+          "company": "Link Technologies",
+          "location": "Las Vegas, Clark County",
+          "targetCity": "Remote",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5643242182?se=qgVSudsg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=7D076081264E8D0FE8A195DE0D176AC252F6C05C",
+          "postedAt": "2026-02-24T01:29:54Z"
+        },
+        {
+          "matchPercent": 45,
+          "matchCategory": "Fair",
+          "reason": "The candidate has relevant technical skills in Python, Java, and full-stack development but lacks the required 5 years of experience and senior-level expertise expected for this $750/day role.",
+          "missingSkills": [
+            "5+ years experience",
+            "Advanced Java development",
+            "Financial systems experience"
+          ],
+          "estimatedSalary": "$133,971.8 - $133,971.8",
+          "title": "Full Stack Developer",
+          "company": "Open Systems Technologies",
+          "location": "Fort Lee, Bergen County",
+          "targetCity": "Remote",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5643235949?se=qgVSudsg8RGx_uICYc_4Pg&utm_medium=api&utm_source=f3daa386&v=CE6669848258DCDA92C2B8422A1214A8EDFCFDCF",
+          "postedAt": "2026-02-24T01:28:33Z"
+        },
+        {
+          "matchPercent": 88,
+          "matchCategory": "Excellent",
+          "reason": "Strong alignment with data analysis experience, Python/SQL skills, ETL pipeline development, and data quality validation work that directly matches the operational excellence focus.",
+          "missingSkills": [
+            "Advanced Excel skills",
+            "Manufacturing/supply chain domain knowledge",
+            "Statistical analysis"
+          ],
+          "estimatedSalary": "$72,128.46 - $72,128.46",
+          "title": "Data Analyst",
+          "company": "Uline",
+          "location": "Kenosha, Kenosha County",
+          "targetCity": "Remote",
+          "source": "Adzuna",
+          "applyLink": "https://www.adzuna.com/land/ad/5647319404?se=MB7Rudsg8RGtnb5D9xoijA&utm_medium=api&utm_source=f3daa386&v=69A0D1A56CAB2FA76C8BD644B48C3B40AE03CBBF",
+          "postedAt": "2026-02-27T10:02:12Z"
+        }
+      ]
+    },
+    {
       "id": 1773547642975,
       "date": "Sun, Mar 15, 2026",
       "timestamp": "2026-03-15T04:07:22.976Z",
