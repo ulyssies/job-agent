@@ -33,9 +33,11 @@ Resume → Job fetch → AI scoring + salary estimation → Dashboard + Email re
 | 🌐 **Multi-source search** | Pulls from Adzuna, The Muse, and Jobicy across 6 target cities |
 | 🧠 **AI scoring** | Every listing scored 0–100% match with a one-line reason |
 | 💰 **Salary estimation** | Claude estimates salary ranges when job boards don't list them |
-| 🔁 **Deduplication** | Cross-run filtering so you only see fresh listings each day |
-| 🖥️ **Live dashboard** | Dark-mode UI tabbed by city, sortable columns, search, 30-day history |
-| 📧 **Daily email** | HTML email with top matches per city, match %, salary, and apply links |
+| 🔁 **Deduplication** | De-dupes within a run and filters out jobs seen in prior runs |
+| 🧾 **Tailored resumes (LaTeX)** | Generates light-touch, ATS-optimized, one-page LaTeX variants for your top matches |
+| 📎 **PDF attachments** | Compiles tailored `.tex` to PDF via `pdflatex` and attaches PDFs to the email (when available) |
+| 🖥️ **Live dashboard** | Dark-mode UI tabbed by city, sortable columns, search, and a run selector to view past runs |
+| 📧 **Daily email** | HTML email with “best of run”, city/remote sections, salary, source, and apply links |
 
 ---
 
@@ -46,6 +48,7 @@ Resume → Job fetch → AI scoring + salary estimation → Dashboard + Email re
 ├── config.js                  # Target cities and job titles
 ├── main.js                    # Master orchestrator
 ├── resume.txt                 # Your resume (gitignored)
+├── resume.tex                 # Your master LaTeX resume (used for tailoring)
 ├── .env.example
 ├── src/
 │   ├── parseResume.js         # AI resume parsing
@@ -53,9 +56,10 @@ Resume → Job fetch → AI scoring + salary estimation → Dashboard + Email re
 │   ├── scoreJobs.js           # AI scoring + salary estimation
 │   ├── database.js            # Persistent run history (30 days)
 │   ├── dashboard.js           # HTML dashboard generation
-│   └── emailSummary.js        # Daily email report
+│   ├── emailSummary.js        # Daily email report (PDF attachments)
+│   └── tailorResumes.js        # Tailored LaTeX resume generator + PDF compile
 └── data/
-    └── jobs.json              # Auto-generated run history (gitignored)
+    └── jobs.json              # Auto-generated run history (committed)
 ```
 
 ---
@@ -68,6 +72,7 @@ Resume → Job fetch → AI scoring + salary estimation → Dashboard + Email re
 - An [Anthropic API key](https://console.anthropic.com)
 - An [Adzuna API key](https://developer.adzuna.com) (free)
 - A Gmail account with an [App Password](https://myaccount.google.com/apppasswords)
+- (Optional, for PDF attachments) A LaTeX toolchain that provides `pdflatex` (BasicTeX/MacTeX on macOS)
 
 ### 1. Install dependencies
 
@@ -87,6 +92,14 @@ cp .env.example .env
 ```bash
 # Paste your resume as plain text into resume.txt
 ```
+
+### 3b. (Optional) Add your LaTeX resume for tailoring + PDFs
+
+Place your master resume at:
+
+- `./resume.tex` (project root)
+
+This enables tailored `.tex` and PDF attachments for top matches.
 
 ### 4. Set your target cities and job titles
 
@@ -114,6 +127,9 @@ Add these to `.env`. **Never commit this file** — it's already in `.gitignore`
 | `EMAIL_USER` | **Yes** | Gmail address the agent sends from |
 | `EMAIL_APP_PASSWORD` | **Yes** | Gmail app password (not your regular password) |
 | `EMAIL_RECIPIENT` | **Yes** | Where the daily report gets delivered |
+| `RESUME_LATEX_PATH` | No | Path to your master LaTeX resume (defaults to `./resume.tex`) |
+| `TEX_BIN` | No | TeX binary directory if `pdflatex` isn’t on PATH when Node runs (e.g. `/Library/TeX/texbin`) |
+| `SKIP_TAILORED_PDF_COMPILE` | No | Set `1`/`true` to generate tailored `.tex` but skip `pdflatex` and PDF attachments |
 
 ---
 
