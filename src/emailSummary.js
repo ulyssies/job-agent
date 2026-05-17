@@ -5,10 +5,10 @@ dotenv.config();
 
 const CATEGORY_COLORS = {
   Excellent: "#22c55e",
-  Strong: "#3b82f6",
-  Good: "#f59e0b",
-  Fair: "#f97316",
-  Low: "#ef4444",
+  Strong:    "#3b82f6",
+  Good:      "#f59e0b",
+  Fair:      "#f97316",
+  Low:       "#ef4444",
 };
 
 function matchColor(pct) {
@@ -34,30 +34,27 @@ function statPill(num, label, color = "#a78bfa") {
   </div>`;
 }
 
-function entryLabel(fit) {
-  if (fit === true)  return `<span style="color:#22c55e;font-size:11px;font-weight:600">✓ Entry</span>`;
-  if (fit === false) return `<span style="color:#f87171;font-size:11px">Stretch</span>`;
-  return "";
-}
-
 function jobTableRows(jobs) {
   return jobs
     .map((r) => {
       const pctColor = matchColor(r.matchPercent);
       const catColor = CATEGORY_COLORS[r.matchCategory] || pctColor;
+      const entryTag = r.entryLevelFit === true
+        ? `<span style="color:#22c55e;font-size:10px;font-weight:600;margin-left:6px">✓ Entry</span>`
+        : r.entryLevelFit === false
+          ? `<span style="color:#f87171;font-size:10px;margin-left:6px">Stretch</span>`
+          : "";
       const sal = r.estimatedSalary
         ? `<span style="color:#22c55e;font-weight:600;white-space:nowrap">${escapeHtml(r.estimatedSalary)}</span>`
         : `<span style="color:#475569">—</span>`;
       const meta = [escapeHtml(r.company), escapeHtml(r.location), escapeHtml(r.source)]
-        .filter(Boolean)
-        .join(" · ");
+        .filter(Boolean).join(" · ");
       const href = escapeHtml(r.applyLink || "#");
       return `
       <tr>
         <td style="padding:10px 12px;font-weight:700;color:${pctColor};white-space:nowrap;vertical-align:top">${r.matchPercent}%</td>
-        <td style="padding:10px 12px;vertical-align:top">
-          <span style="color:${catColor};font-weight:600;font-size:12px">${escapeHtml(r.matchCategory || "—")}</span>
-          <div style="margin-top:3px">${entryLabel(r.entryLevelFit)}</div>
+        <td style="padding:10px 12px;vertical-align:top;white-space:nowrap">
+          <span style="color:${catColor};font-weight:600;font-size:12px">${escapeHtml(r.matchCategory || "—")}</span>${entryTag}
         </td>
         <td style="padding:10px 12px;vertical-align:top">
           <a href="${href}" style="color:#818cf8;text-decoration:none;font-weight:600;font-size:14px">${escapeHtml(r.title)}</a>
@@ -73,26 +70,52 @@ function jobTableRows(jobs) {
 function tableBlock(rows) {
   if (!rows.trim()) return "";
   return `
-      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#111827;border-radius:8px;overflow:hidden;margin-top:4px">
-        <thead>
-          <tr style="background:#1e293b">
-            <th style="padding:8px 12px;text-align:left;color:#64748b;font-size:11px;font-family:system-ui,sans-serif">MATCH</th>
-            <th style="padding:8px 12px;text-align:left;color:#64748b;font-size:11px;font-family:system-ui,sans-serif">TIER</th>
-            <th style="padding:8px 12px;text-align:left;color:#64748b;font-size:11px;font-family:system-ui,sans-serif">ROLE</th>
-            <th style="padding:8px 12px;text-align:left;color:#64748b;font-size:11px;font-family:system-ui,sans-serif">SALARY</th>
-            <th style="padding:8px 12px;text-align:left;color:#64748b;font-size:11px;font-family:system-ui,sans-serif">WHY IT FITS</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>`;
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#111827;border-radius:8px;overflow:hidden;margin-top:8px">
+      <thead>
+        <tr style="background:#1e293b">
+          <th style="padding:8px 12px;text-align:left;color:#64748b;font-size:11px;font-family:system-ui,sans-serif">MATCH</th>
+          <th style="padding:8px 12px;text-align:left;color:#64748b;font-size:11px;font-family:system-ui,sans-serif">TIER</th>
+          <th style="padding:8px 12px;text-align:left;color:#64748b;font-size:11px;font-family:system-ui,sans-serif">ROLE</th>
+          <th style="padding:8px 12px;text-align:left;color:#64748b;font-size:11px;font-family:system-ui,sans-serif">SALARY</th>
+          <th style="padding:8px 12px;text-align:left;color:#64748b;font-size:11px;font-family:system-ui,sans-serif">WHY IT FITS</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
 }
 
-function section(emoji, title, jobs) {
-  const sorted = [...jobs].sort((a, b) => b.matchPercent - a.matchPercent);
+/** Entry level jobs sorted by %, all cities combined — the primary section. */
+function entryLevelSection(jobs) {
+  const sorted = [...jobs]
+    .filter((r) => r.entryLevelFit === true)
+    .sort((a, b) => b.matchPercent - a.matchPercent);
   if (!sorted.length) return "";
   return `
-      <h3 style="color:#a78bfa;margin:28px 0 8px;font-size:15px;font-family:system-ui,sans-serif">${emoji} ${title} <span style="color:#475569;font-size:12px;font-weight:400">(${sorted.length})</span></h3>
-      ${tableBlock(jobTableRows(sorted))}`;
+    <div style="margin-bottom:16px">
+      <h2 style="color:#22c55e;margin:0 0 4px;font-size:16px;font-family:system-ui,sans-serif">✓ Entry Level Fits <span style="color:#475569;font-size:13px;font-weight:400">(${sorted.length})</span></h2>
+      <p style="color:#64748b;margin:0 0 8px;font-size:12px;font-family:system-ui,sans-serif">All entry-level matches across every city, sorted by score — start here.</p>
+      ${tableBlock(jobTableRows(sorted))}
+    </div>`;
+}
+
+/** Collapsible city section — entry level jobs first, then stretch, both sorted by %. */
+function citySection(emoji, label, jobs) {
+  if (!jobs.length) return "";
+  const entry   = [...jobs].filter((r) => r.entryLevelFit === true) .sort((a, b) => b.matchPercent - a.matchPercent);
+  const stretch = [...jobs].filter((r) => r.entryLevelFit !== true) .sort((a, b) => b.matchPercent - a.matchPercent);
+  const sorted  = [...entry, ...stretch];
+  const entryCount = entry.length;
+  const summaryRight = entryCount > 0
+    ? `<span style="color:#22c55e;font-size:12px;margin-left:8px">${entryCount} entry</span>`
+    : "";
+  return `
+    <details style="margin-bottom:6px">
+      <summary style="cursor:pointer;list-style:none;padding:10px 14px;background:#111827;border:1px solid #1e293b;border-radius:8px;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:14px;font-weight:600;color:#e2e8f0">${emoji} ${escapeHtml(label)}</span>
+        <span style="font-size:12px;color:#64748b">${sorted.length} match${sorted.length !== 1 ? "es" : ""}${summaryRight} ▸</span>
+      </summary>
+      ${tableBlock(jobTableRows(sorted))}
+    </details>`;
 }
 
 export async function sendEmailSummary(run) {
@@ -109,32 +132,20 @@ export async function sendEmailSummary(run) {
     },
   });
 
-  const allMatches  = run.results.filter((r) => r.matchPercent >= MIN_MATCH_PERCENT);
-  const excellent   = allMatches.filter((r) => r.matchPercent >= 85).length;
-  const entryFit    = allMatches.filter((r) => r.entryLevelFit === true).length;
-
-  const spotlight = [...allMatches]
-    .filter((r) => r.entryLevelFit !== false)
-    .sort((a, b) => b.matchPercent - a.matchPercent)
-    .slice(0, 10);
-
-  const spotlightBlock = spotlight.length > 0
-    ? `
-      <div style="background:linear-gradient(135deg,#1e1b4b22,#0f172a);border:1px solid #312e81;border-radius:12px;padding:20px 22px;margin-bottom:8px">
-        <h2 style="color:#c4b5fd;margin:0 0 6px;font-size:16px;font-family:system-ui,sans-serif">⭐ Best matches this run</h2>
-        <p style="color:#64748b;margin:0 0 14px;font-size:12px;font-family:system-ui,sans-serif">Entry-level fits sorted by score — start here.</p>
-        ${tableBlock(jobTableRows(spotlight))}
-      </div>`
-    : "";
+  const allMatches = run.results.filter((r) => r.matchPercent >= MIN_MATCH_PERCENT);
+  const excellent  = allMatches.filter((r) => r.matchPercent >= 85).length;
+  const entryFit   = allMatches.filter((r) => r.entryLevelFit === true).length;
 
   const cityBlocks = TARGET_CITIES.map(({ city }) =>
-    section("📍", city, allMatches.filter((r) => r.targetCity === city))
+    citySection("📍", city, allMatches.filter((r) => r.targetCity === city))
   ).join("");
 
-  const remoteBlock  = section("🌐", "Remote (Jobicy)", allMatches.filter((r) => r.targetCity === "Remote"));
-  const variousBlock = section("📰", "Nationwide & curated (The Muse)", allMatches.filter((r) => r.targetCity === "Various"));
+  const remoteBlock  = citySection("🌐", "Remote (Jobicy)",               allMatches.filter((r) => r.targetCity === "Remote"));
+  const variousBlock = citySection("📰", "Nationwide & curated (The Muse)", allMatches.filter((r) => r.targetCity === "Various"));
 
-  const bodyContent = [spotlightBlock, cityBlocks, remoteBlock, variousBlock].filter(Boolean).join("")
+  const bodyContent = entryLevelSection(allMatches)
+    + `<h3 style="color:#64748b;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin:28px 0 10px;font-family:system-ui,sans-serif">By City</h3>`
+    + [cityBlocks, remoteBlock, variousBlock].filter(Boolean).join("")
     || '<p style="color:#64748b">No matches above threshold today.</p>';
 
   const html = `
@@ -152,7 +163,7 @@ export async function sendEmailSummary(run) {
   ${bodyContent}
 
   <p style="margin-top:32px;color:#334155;font-size:12px;text-align:center;font-family:system-ui,sans-serif">
-    Open <strong style="color:#475569">index.html</strong> (your dashboard) for full results, filters, and run history.
+    Open the <strong style="color:#475569">dashboard</strong> for filters, run history, and DA/SWE track view.
   </p>
 </div>`;
 
