@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TARGET_CITIES, JOB_TITLES, EXCLUDED_KEYWORDS } from "../config.js";
+import { TARGET_CITIES, JOB_TITLES, EXCLUDED_KEYWORDS, MAX_JOB_AGE_DAYS } from "../config.js";
 import { getSeenJobs } from "./database.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -152,5 +152,16 @@ export async function fetchAllJobs() {
   if (seniorFilteredOut > 0) {
     console.log(`  📋 ${seniorFilteredOut} jobs filtered out as senior-level.`);
   }
-  return afterSeniorFilter;
+
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - MAX_JOB_AGE_DAYS);
+  const afterDateFilter = afterSeniorFilter.filter((j) => {
+    if (!j.postedAt) return true;
+    return new Date(j.postedAt) >= cutoff;
+  });
+  const dateFilteredOut = afterSeniorFilter.length - afterDateFilter.length;
+  if (dateFilteredOut > 0) {
+    console.log(`  📋 ${dateFilteredOut} jobs filtered out as older than ${MAX_JOB_AGE_DAYS} days.`);
+  }
+  return afterDateFilter;
 }

@@ -51,6 +51,9 @@ export function getJobTrack(title) {
 export const MIN_MATCH_PERCENT = 60;
 export const TOP_N_EMAIL = 10;
 
+/** Filter out listings older than this many days. Jobs with no date are kept. */
+export const MAX_JOB_AGE_DAYS = 14;
+
 export const RESUME_DA_PATH  = "./da_resume.tex";
 export const RESUME_SWE_PATH = "./swe_resume.tex";
 
