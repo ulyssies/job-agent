@@ -9,7 +9,7 @@
 [![Claude](https://img.shields.io/badge/Claude_AI-191919?style=for-the-badge&logo=anthropic&logoColor=white)](https://anthropic.com)
 [![Adzuna](https://img.shields.io/badge/Adzuna_API-f59e0b?style=for-the-badge)](https://developer.adzuna.com)
 
-> **Personal tool:** Built as an active job search tool while looking for my next role in software and data engineering. Not a SaaS product — clone it, configure it for your own search, and run it yourself.
+> **Personal tool:** Built during an active job search targeting Data Analyst and Software Engineer roles. Not a SaaS product — clone it, configure it for your own search, and run it yourself.
 
 </div>
 
@@ -17,11 +17,13 @@
 
 ## How it works
 
-The agent reads your resume, searches multiple job boards across your target cities, scores every listing against your profile using Claude AI, estimates salaries when none are listed, and delivers a ranked report to your inbox every morning.
+The agent reads your resume, searches multiple job boards across your target cities, scores every listing against your profile using Claude AI, and delivers a ranked report to your inbox.
 
 ```
-Resume → Job fetch → AI scoring + salary estimation → Dashboard + Email report
+Resume → Job fetch → AI scoring → Dashboard + Email report
 ```
+
+Scoring accounts for **both** skill alignment and seniority fit — a strong skill match at an unrealistic experience level is scored lower, so the results you see are actually reachable.
 
 ---
 
@@ -29,15 +31,26 @@ Resume → Job fetch → AI scoring + salary estimation → Dashboard + Email re
 
 | Feature | Description |
 |---|---|
-| 📄 **Resume parsing** | Claude AI extracts your skills, titles, and experience automatically |
-| 🌐 **Multi-source search** | Pulls from Adzuna, The Muse, and Jobicy across 6 target cities |
-| 🧠 **AI scoring** | Every listing scored 0–100% match with a one-line reason |
+| 📄 **Dual resume support** | Separate DA and SWE resumes — DA jobs scored against your DA resume, SWE jobs against your SWE resume |
+| 🌐 **Multi-source search** | Pulls from Adzuna, The Muse, and Jobicy across your target cities |
+| 🧠 **AI scoring** | Every listing scored 0–100% on skill match AND seniority fit combined |
+| 🎯 **Entry level filter** | Each job flagged as "Entry" or "Stretch" based on its actual experience requirements |
 | 💰 **Salary estimation** | Claude estimates salary ranges when job boards don't list them |
 | 🔁 **Deduplication** | De-dupes within a run and filters out jobs seen in prior runs |
-| 🧾 **Tailored resumes (LaTeX)** | Generates light-touch, ATS-optimized, one-page LaTeX variants for your top matches |
-| 📎 **PDF attachments** | Compiles tailored `.tex` to PDF via `pdflatex` and attaches PDFs to the email (when available) |
-| 🖥️ **Live dashboard** | Dark-mode UI tabbed by city, sortable columns, search, and a run selector to view past runs |
-| 📧 **Daily email** | HTML email with “best of run”, city/remote sections, salary, source, and apply links |
+| 🖥️ **Live dashboard** | Dark-mode UI with city tabs, entry-level filter, sortable columns, search, and run history |
+| 📧 **Daily email** | Full ranked results grouped by city — no cap, everything above your threshold |
+
+---
+
+## Pipeline (5 steps)
+
+```
+1. Parse resume       → extract skills + profile from your DA resume
+2. Fetch jobs         → Adzuna (per city), Jobicy (remote), The Muse (curated)
+3. Score jobs         → DA jobs vs DA resume, SWE jobs vs SWE resume
+4. Save to database   → 30-day rolling run history
+5. Dashboard + email  → generate index.html, send ranked report
+```
 
 ---
 
@@ -45,21 +58,21 @@ Resume → Job fetch → AI scoring + salary estimation → Dashboard + Email re
 
 ```
 .
-├── config.js                  # Target cities and job titles
-├── main.js                    # Master orchestrator
-├── resume.txt                 # Your resume (gitignored)
-├── resume.tex                 # Your master LaTeX resume (used for tailoring)
-├── .env.example
+├── config.js                  # Target cities, job titles, score threshold
+├── main.js                    # Master orchestrator (5-step pipeline)
+├── da_resume.tex              # Your DA resume (gitignored)
+├── swe_resume.tex             # Your SWE resume (gitignored)
+├── .env                       # API keys and email config (gitignored)
+├── .env.example               # Template for .env
 ├── src/
-│   ├── parseResume.js         # AI resume parsing
-│   ├── jobSearch.js           # Multi-source job fetching
-│   ├── scoreJobs.js           # AI scoring + salary estimation
-│   ├── database.js            # Persistent run history (30 days)
+│   ├── parseResume.js         # AI resume parsing → skills/profile object
+│   ├── jobSearch.js           # Multi-source job fetching + deduplication
+│   ├── scoreJobs.js           # AI scoring — dual resume, entryLevelFit, salary
+│   ├── database.js            # Persistent run history (30-day window)
 │   ├── dashboard.js           # HTML dashboard generation
-│   ├── emailSummary.js        # Daily email report (PDF attachments)
-│   └── tailorResumes.js        # Tailored LaTeX resume generator + PDF compile
+│   └── emailSummary.js        # Daily email report
 └── data/
-    └── jobs.json              # Auto-generated run history (committed)
+    └── jobs.json              # Auto-generated run history (committed for GitHub Pages)
 ```
 
 ---
@@ -72,7 +85,6 @@ Resume → Job fetch → AI scoring + salary estimation → Dashboard + Email re
 - An [Anthropic API key](https://console.anthropic.com)
 - An [Adzuna API key](https://developer.adzuna.com) (free)
 - A Gmail account with an [App Password](https://myaccount.google.com/apppasswords)
-- (Optional, for PDF attachments) A LaTeX toolchain that provides `pdflatex` (BasicTeX/MacTeX on macOS)
 
 ### 1. Install dependencies
 
@@ -84,30 +96,26 @@ npm install
 
 ```bash
 cp .env.example .env
-# Add your keys to .env (see Environment Variables below)
+# Fill in your keys
 ```
 
-### 3. Add your resume
+### 3. Add your resumes
 
-```bash
-# Paste your resume as plain text into resume.txt
-```
+Place your resumes at:
+- `./da_resume.tex` — for Data Analyst / Data Engineer / BI roles
+- `./swe_resume.tex` — for Software Engineer / Backend / Full Stack roles
 
-### 3b. (Optional) Add your LaTeX resume for tailoring + PDFs
+Both are gitignored. The agent automatically routes each job to the correct resume based on the job title.
 
-Place your master resume at:
+### 4. Configure your search
 
-- `./resume.tex` (project root)
+Edit `config.js`:
+- `TARGET_CITIES` — cities to search
+- `DA_JOB_TITLES` / `SWE_JOB_TITLES` — job titles to search per track
+- `MIN_MATCH_PERCENT` — minimum score to include in results (default: 60)
+- `EXCLUDED_KEYWORDS` — title keywords that filter out over-qualified roles
 
-This enables tailored `.tex` and PDF attachments for top matches.
-
-### 4. Set your target cities and job titles
-
-```bash
-# Edit config.js to set your TARGET_CITIES and JOB_TITLES
-```
-
-### 5. Run the agent
+### 5. Run
 
 ```bash
 node main.js
@@ -117,73 +125,76 @@ node main.js
 
 ## Environment Variables
 
-Add these to `.env`. **Never commit this file** — it's already in `.gitignore`.
-
 | Variable | Required | Description |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | **Yes** | Powers resume parsing, job scoring, and salary estimation |
+| `ANTHROPIC_API_KEY` | **Yes** | Powers resume parsing and job scoring |
 | `ADZUNA_APP_ID` | **Yes** | Adzuna API app ID (free tier: 250 req/day) |
 | `ADZUNA_APP_KEY` | **Yes** | Adzuna API app key |
 | `EMAIL_USER` | **Yes** | Gmail address the agent sends from |
 | `EMAIL_APP_PASSWORD` | **Yes** | Gmail app password (not your regular password) |
 | `EMAIL_RECIPIENT` | **Yes** | Where the daily report gets delivered |
-| `RESUME_LATEX_PATH` | No | Path to your master LaTeX resume (defaults to `./resume.tex`) |
-| `TEX_BIN` | No | TeX binary directory if `pdflatex` isn’t on PATH when Node runs (e.g. `/Library/TeX/texbin`) |
-| `SKIP_TAILORED_PDF_COMPILE` | No | Set `1`/`true` to generate tailored `.tex` but skip `pdflatex` and PDF attachments |
 
 ---
 
-## API Reference
+## Job Sources
 
 | Source | Covers | Key Required |
 |---|---|---|
-| Adzuna | Major job boards, 16+ countries | Yes (free) |
-| The Muse | Curated tech and creative roles | No |
-| Jobicy | Remote-first job listings | No |
+| Adzuna | Major job boards across target cities | Yes (free) |
+| The Muse | Curated tech and creative roles, nationwide | No |
+| Jobicy | Remote-first listings | No |
+
+---
+
+## Scoring
+
+Each job is scored 0–100% on two combined dimensions:
+
+- **Skill alignment** — how well the resume's skills, tools, and domain match the job
+- **Seniority fit** — whether the role's experience requirements are realistic for ~1 YOE
+
+Jobs are also flagged as `entryLevelFit: true/false`. In the dashboard, these show as **✓ Entry** or **Stretch** in the Level column. The **Entry Level Only** filter shows just the reachable ones.
 
 ---
 
 ## Automating Daily Runs
 
-**Mac/Linux:**
+**Mac/Linux (cron):**
 ```bash
 crontab -e
-# Runs every day at 7am
+# Every day at 7am
 0 7 * * * cd /path/to/job-agent && node main.js
 ```
-
-**Windows:** Use Task Scheduler to run `node main.js` daily.
 
 ---
 
 ## Cost
 
-Powered by the Anthropic Claude Sonnet API — billed separately from Claude Pro.
+Uses Claude Sonnet 4.6 with prompt caching — the resume is cached across all scoring batches so you only pay to send it once per run.
 
 | Frequency | Estimated Cost |
 |---|---|
-| Per run (~225 jobs scored) | ~$0.80 – $1.00 |
-| 3x per week | ~$2.40 / week |
-| Monthly (3x/week) | ~$9.60 / month |
+| Per run (~200 jobs scored) | ~$0.30 – $0.50 |
+| Daily | ~$9 – $15 / month |
 
 ---
 
 ## Live Dashboard
 
-View the latest job matches: [Live Dashboard](https://ulyssies.github.io/job-agent/)
+[Live Dashboard](https://ulyssies.github.io/job-agent/)
 
 ---
 
 ## Acknowledgments
 
-- [Anthropic Claude](https://anthropic.com/) — resume parsing, job scoring, salary estimation
+- [Anthropic Claude](https://anthropic.com/) — resume parsing, scoring, salary estimation
 - [Adzuna](https://developer.adzuna.com/) — primary job board API
-- [The Muse](https://www.themuse.com/developers/api/v2) — curated job listings
-- [Jobicy](https://jobicy.com/jobs-rss-feed) — remote job listings
+- [The Muse](https://www.themuse.com/developers/api/v2) — curated listings
+- [Jobicy](https://jobicy.com/jobs-rss-feed) — remote listings
 - [Nodemailer](https://nodemailer.com/) — email delivery
 
 ---
 
 <div align="center">
-<sub>Personal job search tool · Built with Node.js and Claude AI · Not production-ready</sub>
+<sub>Personal job search tool · Built with Node.js and Claude AI</sub>
 </div>

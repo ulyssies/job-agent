@@ -1,4 +1,22 @@
 .env
 node_modules/
-resume.txt
 output/
+
+# Personal resume files — plain text and LaTeX source
+resume.txt
+resume.tex
+da_resume.tex
+swe_resume.tex
+
+# Resume PDF exports
+*.pdf
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.synctex.gz
+
+# Editor / tooling
+.vscode/
+.agents/
