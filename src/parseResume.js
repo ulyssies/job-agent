@@ -1,15 +1,16 @@
 import Anthropic from "@anthropic-ai/sdk";
 import fs from "fs";
+import { RESUME_DA_PATH } from "../config.js";
 import dotenv from "dotenv";
 dotenv.config();
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-export async function extractSkills() {
-  const resume = fs.readFileSync("./resume.txt", "utf-8");
+export async function extractSkills(resumePath = RESUME_DA_PATH) {
+  const resume = fs.readFileSync(resumePath, "utf-8");
 
   const response = await client.messages.create({
-    model: "claude-sonnet-4-20250514",
+    model: "claude-sonnet-4-6",
     max_tokens: 1000,
     messages: [
       {

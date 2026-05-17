@@ -44,13 +44,14 @@ export function saveRun(db, results) {
       reason:           r.reason,
       missingSkills:    r.missingSkills || [],
       estimatedSalary:  r.estimatedSalary ?? null,
+      entryLevelFit:    r.entryLevelFit ?? null,
       title:            r.job.title,
       company:          r.job.company,
       location:         r.job.location,
       targetCity:       r.job.targetCity,
       source:           r.job.source,
       applyLink:        r.job.applyLink,
-      postedAt:        r.job.postedAt,
+      postedAt:         r.job.postedAt,
     })),
   };
 

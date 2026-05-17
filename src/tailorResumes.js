@@ -147,30 +147,22 @@ ${j.description}`;
 
     try {
       const response = await client.messages.create({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-6",
         max_tokens: 8192,
         messages: [
           {
             role: "user",
-            content: `You are an expert LaTeX résumé editor focused on minimal, ATS-friendly tweaks.
-
-MASTER RÉSUMÉ (LaTeX):
-
-${latexSource}
-
-TARGET JOB:
-${jobContext}
-
-GOALS (strict priority):
-1. **Keep the core résumé almost unchanged.** Same employers, roles, dates, degrees, and section order as in the master file. Do not remove major roles or rewrite everything.
-2. **Professional summary / profile / objective** — this is the main place to tailor: rewrite 2–4 sentences so they speak directly to this role and company, using clear, factual language from the master (no invented achievements).
-3. **ATS optimization (light touch):** Where bullets already support it, naturally weave in a few exact or close keywords from the job description (tools, domains, methods) only when they accurately describe existing work. Do not keyword-stuff. Prefer standard section titles recruiters expect (Experience, Education, Skills, etc.) if the master already uses them; do not rename sections in a gimmicky way.
-4. **Bullet edits — minimal:** Prefer light rephrasing or reordering existing bullets (most relevant first). Only trim or merge bullets if needed for length. Never invent projects, metrics, or technologies.
-5. **One page:** The final document must be compilable to **a single U.S. letter–sized page** (or equivalent). If the master is already one page, stay within that density: tighten wording only as needed; remove the *least* relevant bullet(s) if you must; do not add new sections or large blocks of text. Do not introduce large vertical space or new packages that blow up pagination.
-
-OUTPUT:
-- Return ONLY the full LaTeX from \\documentclass through \\end{document}.
-- No markdown, no commentary.`,
+            content: [
+              {
+                type: "text",
+                text: `You are an expert LaTeX résumé editor focused on minimal, ATS-friendly tweaks.\n\nMASTER RÉSUMÉ (LaTeX):\n\n${latexSource}`,
+                cache_control: { type: "ephemeral" },
+              },
+              {
+                type: "text",
+                text: `TARGET JOB:\n${jobContext}\n\nGOALS (strict priority):\n1. **Keep the core résumé almost unchanged.** Same employers, roles, dates, degrees, and section order as in the master file. Do not remove major roles or rewrite everything.\n2. **Professional summary / profile / objective** — this is the main place to tailor: rewrite 2–4 sentences so they speak directly to this role and company, using clear, factual language from the master (no invented achievements).\n3. **ATS optimization (light touch):** Where bullets already support it, naturally weave in a few exact or close keywords from the job description (tools, domains, methods) only when they accurately describe existing work. Do not keyword-stuff. Prefer standard section titles recruiters expect (Experience, Education, Skills, etc.) if the master already uses them; do not rename sections in a gimmicky way.\n4. **Bullet edits — minimal:** Prefer light rephrasing or reordering existing bullets (most relevant first). Only trim or merge bullets if needed for length. Never invent projects, metrics, or technologies.\n5. **One page:** The final document must be compilable to **a single U.S. letter–sized page** (or equivalent). If the master is already one page, stay within that density: tighten wording only as needed; remove the *least* relevant bullet(s) if you must; do not add new sections or large blocks of text. Do not introduce large vertical space or new packages that blow up pagination.\n\nOUTPUT:\n- Return ONLY the full LaTeX from \\documentclass through \\end{document}.\n- No markdown, no commentary.`,
+              },
+            ],
           },
         ],
       });
